@@ -16,7 +16,7 @@ class AuthService {
 
   auth0 = new auth0.WebAuth({
     domain: 'team-up.auth0.com',
-    clientID: 'gU4WDOVd5QeYI0H0Wr6PwVsgseI7dQ69',
+    clientID: process.env.AUTH_0_CLEINT_ID,
     redirectUri: 'http://localhost:8080/callback',
     audience: 'https://team-up.auth0.com/userinfo',
     responseType: 'token id_token',

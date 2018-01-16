@@ -5,7 +5,7 @@ import { setContext } from 'apollo-link-context'
 
 const httpLink = new HttpLink({
   // You should use an absolute URL here
-  uri: 'https://api.graph.cool/simple/v1/cjbegc8ui00q30114w8388285'
+  uri: process.env.GRAPH_COOL_PATH
 })
 
 const authLink = setContext((_, { headers }) => {
