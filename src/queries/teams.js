@@ -35,9 +35,17 @@ const TEAM_MEMBERS_BY_ID = gql`
     }
   }
 `
+const ADD_USER_TO_TEAM = gql`
+  mutation ($userId: ID!, $teamId: ID!) {
+    updateTeam(id: $teamId, usersIds: [$userId]){
+      id
+    }
+  }
+`
 
 export default {
   ALL_TEAMS_QUERY,
   TEAM_BY_ID,
-  TEAM_MEMBERS_BY_ID
+  TEAM_MEMBERS_BY_ID,
+  ADD_USER_TO_TEAM
 }

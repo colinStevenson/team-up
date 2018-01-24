@@ -13,10 +13,17 @@ const CREATE_INVITATION = gql`
   }
 `
 
+// const SET_INVITE_ACCEPTED = gql`
+//   mutation {
+//     updateInvitation(id: $teamId)
+//   }
+// `
+
 const GET_TEAM_INVITATIONS = gql`
   query ($email: String!) {
     allInvitations(filter:{
-      email: $email
+      email: $email,
+      accepted: false
     }) {
       id
       team {

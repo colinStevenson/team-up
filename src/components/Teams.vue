@@ -21,7 +21,7 @@
           <ul class="list-group list-group-flush">
               <li v-for="invitation in invitations" class="list-group-item d-flex justify-content-between">
                 <span>{{invitation.team.name}}</span>
-                <button class="btn btn-primary btn-sm">Join</button>
+                <button class="btn btn-primary btn-sm" @click="joinTeam(invitation.team.id)">Join</button>
               </li>
           </ul>
         </section>
@@ -31,6 +31,7 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
+import Queries from '../queries'
 export default {
   name: 'Teams',
   computed: {
@@ -55,6 +56,23 @@ export default {
     requestTeams () {
       this.$store.dispatch('getTeams', this.user.id)
       this.$store.dispatch('getInvitations', this.user.email)
+    },
+    joinTeam (teamId) {
+      this.$apollo.mutate({
+        mutation: Queries.ADD_USER_TO_TEAM,
+        variables: {
+          userId: this.user.id,
+          teamId: teamId
+        }
+      }).then((response) => {
+        console.log(response.data)
+        if (response.data && response.data.updateTeam && response.data.updateTeam.id) {
+          // update invitation
+        }
+      }).catch((error) => {
+        // Error
+        console.error(error)
+      })
     }
   },
   watch: {
@@ -66,3 +84,4 @@ export default {
   }
 }
 </script>
+
