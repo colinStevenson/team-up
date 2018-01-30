@@ -19,9 +19,12 @@
             <h2 class="card-title">Invitations</h2>
           </div>
           <ul class="list-group list-group-flush">
-              <li v-for="invitation in invitations" class="list-group-item d-flex justify-content-between">
+              <li 
+                v-for="invitation in invitations" 
+                class="list-group-item d-flex justify-content-between invitation" 
+                :class="acceptedInvitations.includes(invitation.id) ? 'accepted' : ''">
                 <span>{{invitation.team.name}}</span>
-                <button class="btn btn-primary btn-sm" @click="joinTeam(invitation.team.id)">Join</button>
+                <button class="btn btn-primary btn-sm" @click="joinTeam(invitation.team.id, invitation.id)">Join</button>
               </li>
           </ul>
         </section>
@@ -31,14 +34,14 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
-import Queries from '../queries'
 export default {
   name: 'Teams',
   computed: {
     ...mapGetters({
       user: 'user',
       teams: 'teams',
-      invitations: 'invitations'
+      invitations: 'invitations',
+      acceptedInvitations: 'acceptedInvitations'
     })
   },
   mounted () {
@@ -57,21 +60,11 @@ export default {
       this.$store.dispatch('getTeams', this.user.id)
       this.$store.dispatch('getInvitations', this.user.email)
     },
-    joinTeam (teamId) {
-      this.$apollo.mutate({
-        mutation: Queries.ADD_USER_TO_TEAM,
-        variables: {
-          userId: this.user.id,
-          teamId: teamId
-        }
-      }).then((response) => {
-        console.log(response.data)
-        if (response.data && response.data.updateTeam && response.data.updateTeam.id) {
-          // update invitation
-        }
-      }).catch((error) => {
-        // Error
-        console.error(error)
+    joinTeam (teamId, invitationId) {
+      this.$store.dispatch('addUserToTeam', {
+        invitationId,
+        teamId,
+        userId: this.user.id
       })
     }
   },
@@ -84,4 +77,12 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+  .invitation{
+    transition: 0.3s opacity ease-out;
 
+    &.accepted{
+      opacity: 0;
+    }
+  }
+</style>

@@ -13,11 +13,13 @@ const CREATE_INVITATION = gql`
   }
 `
 
-// const SET_INVITE_ACCEPTED = gql`
-//   mutation {
-//     updateInvitation(id: $teamId)
-//   }
-// `
+const SET_INVITE_ACCEPTED = gql`
+  mutation ($id: ID!){
+    updateInvitation(id: $id, accepted:true) {
+      id
+    }
+  }
+`
 
 const GET_TEAM_INVITATIONS = gql`
   query ($email: String!) {
@@ -36,5 +38,6 @@ const GET_TEAM_INVITATIONS = gql`
 
 export default {
   CREATE_INVITATION,
-  GET_TEAM_INVITATIONS
+  GET_TEAM_INVITATIONS,
+  SET_INVITE_ACCEPTED
 }
