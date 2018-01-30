@@ -4,12 +4,25 @@
       <h3 class="card-title h4">Events</h3>
     </div>
     <ul class="list-group list-group-flush">
-      <li v-for="event in teamEvents" class="list-group-item">
+      <li v-for="event in teamEvents" class="list-group-item d-flex justify-content-between">
         <router-link :to="`/event/${event.id}`">{{event.name}}</router-link>
+        <div>{{$moment(event.time).format('MMM Do [at] hh:mma')}}</div>
       </li>
     </ul>
     <div class="card-body">
-      <button class="btn btn-primary card-link">Add Event</button>
+      <button class="btn btn-primary card-link" @click="toggleEditing" v-if="!isEditing">Add Event</button>
+      <div class="mt-3" v-if="isEditing">
+        <div class="form-group">
+          <label for="event-name">Event Name</label>
+          <input type="text" class="form-control" id="event-name" placeholder="Enter event name" v-model="eventName">
+        </div>
+        <div class="form-group">
+          <label for="event-date">Date/ Time</label>
+          <input class="form-control" type="datetime-local" id="event-date" v-model="eventDate">
+        </div>
+        <button class="btn btn-primary mr-sm-3" type="button" @click="saveEvent">Save</button>
+        <button class="btn btn-danger" type="button" @click="toggleEditing">Cancel</button>
+      </div>    
     </div>
   </section>
 </template>
@@ -21,6 +34,26 @@ export default {
     ...mapGetters({
       teamEvents: 'teamEvents'
     })
+  },
+  data () {
+    return {
+      isEditing: false,
+      eventName: null,
+      eventDate: null
+    }
+  },
+  methods: {
+    toggleEditing () {
+      this.isEditing = !this.isEditing
+    },
+    saveEvent () {
+      // console.log(this.eventName, this.eventDate)
+      this.$store.dispatch('createTeamEvent', {
+        teamId: this.teamId,
+        name: this.eventName,
+        eventDate: this.eventDate
+      })
+    }
   },
   mounted () {
     this.$store.dispatch('getTeamEvents', this.teamId)

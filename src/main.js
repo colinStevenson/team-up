@@ -6,9 +6,12 @@ import router from './router'
 import store from './store'
 import VueApollo from 'vue-apollo'
 import apolloClient from './apollo'
+import moment from 'moment'
+import VueMomentJS from 'vue-momentjs'
 
 Vue.config.productionTip = false
 Vue.use(VueApollo)
+Vue.use(VueMomentJS, moment)
 
 const apolloProvider = new VueApollo({
   defaultClient: apolloClient
