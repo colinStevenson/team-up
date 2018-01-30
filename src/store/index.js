@@ -14,7 +14,8 @@ const store = new Vuex.Store({
     teamMembers: null,
     teamEvents: null,
     isRegisteredUser: null,
-    invitations: null
+    invitations: null,
+    acceptedInvitations: []
   },
   getters: {
     user: state => state.user,
@@ -23,7 +24,8 @@ const store = new Vuex.Store({
     teamMembers: state => state.teamMembers,
     teamEvents: state => state.teamEvents,
     isRegisteredUser: state => state.isRegisteredUser,
-    invitations: state => state.invitations
+    invitations: state => state.invitations,
+    acceptedInvitations: state => state.acceptedInvitations
   },
   mutations: {
     SET_USER (state, user) {
@@ -46,9 +48,34 @@ const store = new Vuex.Store({
     },
     SET_TEAM_INVITATIONS (state, invitations) {
       state.invitations = invitations
+    },
+    SET_INVITATION_ACCEPTED (state, invitationId) {
+      state.acceptedInvitations.push(invitationId)
     }
   },
   actions: {
+    addUserToTeam (context, {invitationId, userId, teamId}) {
+      apolloClient.mutate({
+        mutation: Queries.ADD_USER_TO_TEAM,
+        variables: {
+          userId,
+          teamId
+        }
+      }).then((response) => {
+        apolloClient.mutate({
+          mutation: Queries.SET_INVITE_ACCEPTED,
+          variables: {
+            id: invitationId
+          }
+        }).then(res => {
+          console.log(context)
+          context.commit('SET_INVITATION_ACCEPTED', invitationId)
+        })
+      }).catch((error) => {
+        // Error
+        console.error(error)
+      })
+    },
     getUser (context) {
       apolloClient.query({
         query: Queries.GET_USER,
