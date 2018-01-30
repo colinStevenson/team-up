@@ -68,7 +68,6 @@ const store = new Vuex.Store({
             id: invitationId
           }
         }).then(res => {
-          console.log(context)
           context.commit('SET_INVITATION_ACCEPTED', invitationId)
         })
       }).catch((error) => {
