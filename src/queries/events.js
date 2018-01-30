@@ -23,8 +23,20 @@ const EVENTS_BY_TEAM = gql`
     }
   }
 `
+const CREATE_EVENT = gql`
+  mutation CreateEvent($name: String!, $eventDate: DateTime!, $teamId: ID!) {
+    createEvent(
+      name: $name,
+      time: $eventDate,
+      teamId: $teamId
+    ) {
+      id
+    }
+  } 
+`
 
 export default {
   EVENT_BY_ID,
-  EVENTS_BY_TEAM
+  EVENTS_BY_TEAM,
+  CREATE_EVENT
 }

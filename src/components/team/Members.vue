@@ -5,7 +5,7 @@
     </div>
     <ul class="list-group list-group-flush">
       <li v-for="member in teamMembers" class="list-group-item">
-        {{member.firstName}} {{member.lastName}} {{member.id}}
+        {{member.firstName}} {{member.lastName}}
       </li>
     </ul>
     <div class="card-body">
