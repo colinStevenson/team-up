@@ -15,7 +15,7 @@
           <input v-model="firstName" type="text" class="form-control" id="register-first-name" placeholder="Enter First Name">
         </div>
         <div class="form-group">
-          <label for="regster-last-name">First Name</label>
+          <label for="regster-last-name">Last Name</label>
           <input v-model="lastName" type="text" class="form-control" id="register-last-name" placeholder="Enter Last Name">
         </div>
         <div>
@@ -67,14 +67,19 @@ export default {
         }
       }).then((response) => {
         if (response && response.data && response.data.createUser && response.data.createUser.id) {
-          this.$router.push({ name: 'Home' })
+          this.$store.dispatch('getUser')
+          this.$router.push({ name: 'Teams' })
         } else {
           // Something went wrong, deal with it
         }
       }).catch((error) => {
-        // Error
         console.error(error)
       })
+    }
+  },
+  mounted () {
+    if (!this.auth.getIdToken()) {
+      this.auth.login()
     }
   }
 }

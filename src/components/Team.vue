@@ -16,6 +16,7 @@
 import { mapGetters } from 'vuex'
 import Events from './team/Events'
 import Members from './team/Members'
+import RequiresRegistrationMixin from './mixins/RequiresRegistrationMixin'
 
 export default {
   name: 'Team',
@@ -31,6 +32,9 @@ export default {
       return !!this.team
     }
   },
+  mixins: [
+    RequiresRegistrationMixin
+  ],
   mounted () {
     this.$store.dispatch('getTeam', this.id)
   },

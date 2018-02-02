@@ -34,6 +34,8 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
+import RequiresRegistrationMixin from './mixins/RequiresRegistrationMixin'
+
 export default {
   name: 'Teams',
   computed: {
@@ -68,6 +70,9 @@ export default {
       })
     }
   },
+  mixins: [
+    RequiresRegistrationMixin
+  ],
   watch: {
     user () {
       if (this.user) {

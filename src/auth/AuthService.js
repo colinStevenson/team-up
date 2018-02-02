@@ -11,6 +11,7 @@ class AuthService {
     this.setSession = this.setSession.bind(this)
     this.logout = this.logout.bind(this)
     this.isAuthenticated = this.isAuthenticated.bind(this)
+    this.isRegistered = null
     window.auth0 = auth0
   }
 
@@ -31,7 +32,7 @@ class AuthService {
     this.auth0.parseHash((err, authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
         this.setSession(authResult)
-        router.replace('home')
+        router.replace('teams')
       } else if (err) {
         router.replace('home')
         console.log(err)

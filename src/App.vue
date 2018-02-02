@@ -8,10 +8,17 @@
         <div class="d-inline-flex">
           <button
             type="button"
-            class="btn btn-success btn-sm"
+            class="btn btn-primary btn-sm"
             v-if="!authenticated"
             @click="login()">
               Log In
+          </button>
+          <button
+            type="button"
+            class="btn btn-success btn-sm ml-2"
+            v-if="!authenticated"
+            @click="register()">
+              Sign up
           </button>
           <button
             type="button"
@@ -23,7 +30,7 @@
         </div>
       </header>
     </nav>
-    <main v-if="loading">
+    <main v-if="loadingUserData">
       <site-loader></site-loader>
     </main>
     <main v-else>
@@ -46,6 +53,9 @@ export default {
   name: 'app',
   created () {
     this.$store.dispatch('getUser')
+    auth.authNotifier.on('authChange', (authStatus) => {
+      this.$store.dispatch('getUser')
+    })
   },
   components: {
     SiteLoader
@@ -53,11 +63,9 @@ export default {
   computed: {
     ...mapGetters({
       user: 'user',
-      isRegisteredUser: 'isRegisteredUser'
-    }),
-    isRegistered () {
-      return !!this.user
-    }
+      isRegisteredUser: 'isRegisteredUser',
+      loadingUserData: 'loadingUserData'
+    })
   },
   data () {
     authNotifier.on('authChange', authState => {
@@ -65,21 +73,14 @@ export default {
     })
     return {
       auth,
-      authenticated,
-      registered: false,
-      loading: true
+      authenticated
     }
   },
   methods: {
     login,
-    logout
-  },
-  watch: {
-    isRegisteredUser () {
-      this.loading = false
-      if (this.isRegisteredUser === false) {
-        // this.$router.replace('/Register')
-      }
+    logout,
+    register () {
+      this.$router.push('register')
     }
   }
 }

@@ -3,12 +3,14 @@ import apolloClient from '../../apollo'
 
 const state = {
   user: null,
-  isRegisteredUser: null
+  isRegisteredUser: null,
+  loadingUserData: true
 }
 
 const getters = {
   user: state => state.user,
-  isRegisteredUser: state => state.isRegisteredUser
+  isRegisteredUser: state => state.isRegisteredUser,
+  loadingUserData: state => state.loadingUserData
 }
 
 const actions = {
@@ -34,6 +36,7 @@ const actions = {
     })
   },
   getUser (context) {
+    context.commit('SET_LOADING_USER_DATA', true)
     apolloClient.query({
       query: Queries.GET_USER,
       fetchPolicy: 'network-only'
@@ -41,6 +44,7 @@ const actions = {
       const isRegisteredUser = !!result.data.user
       context.commit('SET_REGISTERED_USER_STATE', isRegisteredUser)
       context.commit('SET_USER', result.data.user)
+      context.commit('SET_LOADING_USER_DATA', false)
     })
   }
 }
@@ -51,6 +55,9 @@ const mutations = {
   },
   SET_REGISTERED_USER_STATE (state, isRegisteredUser) {
     state.isRegisteredUser = isRegisteredUser
+  },
+  SET_LOADING_USER_DATA (state, isLoadingUserData) {
+    state.loadingUserData = isLoadingUserData
   }
 }
 
