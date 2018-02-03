@@ -31,12 +31,9 @@ export default {
     ...mapGetters({
       teamMembers: 'teamMembers',
       teamMembersLoading: 'teamMembersLoading',
-      role: 'role',
+      isAdmin: 'isAdmin',
       roleLoading: 'roleLoading'
     }),
-    isAdmin () {
-      return this.role === 'Owner' || this.role === 'Admin'
-    },
     isLoading () {
       return this.roleLoading || this.teamMembersLoading
     }

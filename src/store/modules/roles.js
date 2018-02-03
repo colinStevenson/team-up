@@ -3,12 +3,16 @@ import apolloClient from '../../apollo'
 
 const state = {
   role: null,
-  roleLoading: null
+  roleLoading: null,
+  isAdmin: null
 }
 
 const getters = {
   role: state => state.role,
-  roleLoading: state => state.roleLoading
+  roleLoading: state => state.roleLoading,
+  isAdmin: state => {
+    return state.role ? state.role === 'Admin' || state.role === 'Owner' : false
+  }
 }
 
 const actions = {
