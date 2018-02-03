@@ -19,25 +19,30 @@ import Members from './team/Members'
 import RequiresRegistrationMixin from './mixins/RequiresRegistrationMixin'
 
 export default {
-  name: 'Team',
+  name: 'Teamuser',
   components: {
     Events,
     Members
   },
   computed: {
     ...mapGetters({
-      team: 'team'
+      team: 'team',
+      user: 'user'
     }),
     hasSufficientData () {
       return !!this.team
     }
   },
+  created () {
+    this.$store.dispatch('getTeam', this.id)
+    this.$store.dispatch('getUserTeamRole', {
+      userId: this.user.id,
+      teamId: this.id
+    })
+  },
   mixins: [
     RequiresRegistrationMixin
   ],
-  mounted () {
-    this.$store.dispatch('getTeam', this.id)
-  },
   props: ['id']
 }
 </script>

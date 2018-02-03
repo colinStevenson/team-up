@@ -1,5 +1,5 @@
 <template>
-  <section class="card">
+  <section class="card" :class="isLoading ? 'loading' : ''">
     <div class="card-body">
       <h3 class="card-title h4">Members</h3>
     </div>
@@ -8,7 +8,7 @@
         {{member.firstName}} {{member.lastName}}
       </li>
     </ul>
-    <div class="card-body">
+    <div class="card-body" v-if="isAdmin">
       <div class="form-inline" v-if="isInviting">
         <div class="form-group">
           <input type="text" class="form-control" placeholder="Email address" v-model="email">
@@ -17,7 +17,7 @@
         <button class="btn btn-danger" type="button" @click="toggleInviting">Cancel</button>
       </div>
       <div v-else>
-        <button class="btn btn-info card-link" @click="toggleInviting">Invite people</button>
+        <button class="btn btn-primary card-link" @click="toggleInviting">Invite people</button>
       </div>
     </div>
   </section>
@@ -29,8 +29,14 @@ export default {
   name: 'Members',
   computed: {
     ...mapGetters({
-      teamMembers: 'teamMembers'
-    })
+      teamMembers: 'teamMembers',
+      teamMembersLoading: 'teamMembersLoading',
+      isAdmin: 'isAdmin',
+      roleLoading: 'roleLoading'
+    }),
+    isLoading () {
+      return this.roleLoading || this.teamMembersLoading
+    }
   },
   data () {
     return {
