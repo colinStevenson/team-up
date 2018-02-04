@@ -7,6 +7,12 @@
       <li v-for="member in teamMembers" class="list-group-item">
         {{member.firstName}} {{member.lastName}}
       </li>
+      <template v-if="isAdmin">
+        <li v-for="invitation in unacceptedInvitations" class="list-group-item d-flex justify-content-between">
+          <span class="text-muted">{{invitation.email}}</span> 
+          <em>Invitation pending</em>
+        </li>
+      </template>
     </ul>
     <div class="card-body" v-if="isAdmin">
       <div class="form-inline" v-if="isInviting">
@@ -32,7 +38,8 @@ export default {
       teamMembers: 'teamMembers',
       teamMembersLoading: 'teamMembersLoading',
       isAdmin: 'isAdmin',
-      roleLoading: 'roleLoading'
+      roleLoading: 'roleLoading',
+      unacceptedInvitations: 'unacceptedInvitations'
     }),
     isLoading () {
       return this.roleLoading || this.teamMembersLoading
@@ -55,11 +62,26 @@ export default {
         userId: 'cjbs2ctasnn7b01702y18svyo'
       })
       this.email = ''
+    },
+    requestUnacceptedInvitations () {
+      this.$store.dispatch('getUnacceptedInvitations', {
+        teamId: this.teamId
+      })
     }
   },
   mounted () {
     this.$store.dispatch('getTeamMembers', this.teamId)
+    if (this.isAdmin) {
+      this.requestUnacceptedInvitations()
+    }
   },
-  props: ['teamId']
+  props: ['teamId'],
+  watch: {
+    isAdmin () {
+      if (this.isAdmin) {
+        this.requestUnacceptedInvitations()
+      }
+    }
+  }
 }
 </script>
