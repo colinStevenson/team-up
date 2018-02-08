@@ -4,13 +4,15 @@ import apolloClient from '../../apollo'
 const state = {
   teams: null,
   team: null,
-  teamMembers: null
+  teamMembers: null,
+  teamMembersLoading: null
 }
 
 const getters = {
   teams: state => state.teams,
   team: state => state.team,
-  teamMembers: state => state.teamMembers
+  teamMembers: state => state.teamMembers,
+  teamMembersLoading: state => state.teamMembersLoading
 }
 
 const actions = {
@@ -35,12 +37,14 @@ const actions = {
     })
   },
   getTeamMembers (context, teamId) {
+    context.commit('SET_TEAM_MEMBERS_LOADING', true)
     apolloClient.query({
       query: Queries.TEAM_MEMBERS_BY_ID,
       variables: {
         teamId
       }
     }).then((result) => {
+      context.commit('SET_TEAM_MEMBERS_LOADING', false)
       context.commit('SET_TEAM_MEMBERS', result.data.allUsers)
     })
   }
@@ -55,6 +59,9 @@ const mutations = {
   },
   SET_TEAM_MEMBERS (state, teamMembers) {
     state.teamMembers = teamMembers
+  },
+  SET_TEAM_MEMBERS_LOADING (state, teamMembersLoading) {
+    state.teamMembersLoading = teamMembersLoading
   }
 }
 

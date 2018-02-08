@@ -21,6 +21,20 @@ const SET_INVITE_ACCEPTED = gql`
   }
 `
 
+const GET_UNACCEPTED_INVITATIONS = gql`
+  query ($teamId: ID!) {
+    allInvitations(filter: {
+      accepted:false,
+      team: {
+        id: $teamId
+      }
+    }) {
+      id,
+      email
+    }
+  }
+`
+
 const GET_TEAM_INVITATIONS = gql`
   query ($email: String!) {
     allInvitations(filter:{
@@ -39,5 +53,6 @@ const GET_TEAM_INVITATIONS = gql`
 export default {
   CREATE_INVITATION,
   GET_TEAM_INVITATIONS,
+  GET_UNACCEPTED_INVITATIONS,
   SET_INVITE_ACCEPTED
 }
