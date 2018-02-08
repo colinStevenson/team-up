@@ -20,6 +20,9 @@ const actions = {
         userId,
         status
       }
+    }).then(result => {
+      console.log('hi')
+      context.dispatch('getCurrentAttendance', {eventId, userId, forceNetwork: true})
     })
   },
   getAttendances (context, eventId) {
@@ -32,13 +35,15 @@ const actions = {
       context.commit('SET_EVENT_ATTENDANCES', result.data.allAttendances)
     })
   },
-  getCurrentAttendance (context, {eventId, userId}) {
+  getCurrentAttendance (context, {eventId, userId, forceNetwork}) {
+    console.log(forceNetwork)
     apolloClient.query({
       query: Queries.GET_MOST_RECENT_ATTENDANCE,
       variables: {
         eventId,
         userId
-      }
+      },
+      fetchPolicy: forceNetwork ? 'network-only' : 'cache-first'
     }).then((result) => {
       context.commit('SET_CURRENT_ATTENDANCE', result.data.allAttendances[0])
     })

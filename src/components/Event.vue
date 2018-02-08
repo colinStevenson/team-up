@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid" v-if="event && currentAttendance">
+  <div class="container-fluid" v-if="event">
     <h3>{{event.team.name}}</h3>
     <section class="card">
       <div class="card-header">
@@ -15,15 +15,15 @@
       </div>
       <div class="card-body">
         <div class="h5">Are you in?</div>
-        <button class="btn btn-success btn-lg" v-bind:class="{ disabled: currentAttendance.status == 'Yes'}" v-on:click="updateEventStatus('Yes')">YES</button>
-        <button class="btn btn-warning btn-lg" v-bind:class="{ disabled: currentAttendance.status == 'Maybe'}" v-on:click="updateEventStatus('Maybe')">MAYBE</button>
-        <button class="btn btn-danger btn-lg" v-bind:class="{ disabled: currentAttendance.status == 'No'}" v-on:click="updateEventStatus('No')">NO</button>
+        <button class="btn btn-success btn-lg" :class="{ disabled: attendanceStatus == 'Yes'}" @click="updateEventStatus('Yes')">YES</button>
+        <button class="btn btn-warning btn-lg" :class="{ disabled: attendanceStatus == 'Maybe'}" @click="updateEventStatus('Maybe')">MAYBE</button>
+        <button class="btn btn-danger btn-lg" :class="{ disabled: attendanceStatus == 'No'}" @click="updateEventStatus('No')">NO</button>
       </div>
     </section>
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'Event',
@@ -33,14 +33,20 @@ export default {
       user: 'user',
       event: 'event',
       currentAttendance: 'currentAttendance'
-    })
+    }),
+    attendanceStatus () {
+      const attendance = this.currentAttendance
+      return attendance ? attendance.status : null
+    }
   },
   methods: {
-    requestAttendances () {
-      this.$store.dispatch('getCurrentAttendance', {eventId: this.id, userId: this.user.id})
-    },
+    ...mapActions({
+      getEvent: 'getEvent',
+      getCurrentAttendance: 'getCurrentAttendance',
+      recordAttendance: 'recordAttendance'
+    }),
     updateEventStatus (status) {
-      this.$store.dispatch('recordAttendance', {
+      this.recordAttendance({
         eventId: this.id,
         userId: this.user.id,
         status: status
@@ -48,8 +54,8 @@ export default {
     }
   },
   mounted () {
-    this.$store.dispatch('getEvent', this.id)
-    this.requestAttendances()
+    this.getEvent(this.id)
+    this.getCurrentAttendance({eventId: this.id, userId: this.user.id})
   }
 }
 </script>
