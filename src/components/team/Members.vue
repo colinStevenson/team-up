@@ -1,7 +1,7 @@
 <template>
   <section class="card">
-    <div class="card-body">
-      <h3 class="card-title h4">Members</h3>
+    <div class="card-header">
+      <h3>Members</h3>
     </div>
     <ul class="list-group list-group-flush">
       <li v-for="member in teamMembers" class="list-group-item">
@@ -17,7 +17,7 @@
         <button class="btn btn-danger" type="button" @click="toggleInviting">Cancel</button>
       </div>
       <div v-else>
-        <button class="btn btn-info card-link" @click="toggleInviting">Invite people</button>
+        <button class="btn btn-outline-info card-link" @click="toggleInviting">Invite people</button>
       </div>
     </div>
   </section>
