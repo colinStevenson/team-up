@@ -13,13 +13,14 @@ class AuthService {
     this.isAuthenticated = this.isAuthenticated.bind(this)
     this.isRegistered = null
     window.auth0 = auth0
+    window.auth = this
   }
 
   auth0 = new auth0.WebAuth({
     domain: 'team-up.auth0.com',
     clientID: process.env.AUTH_0_CLEINT_ID,
     redirectUri: 'http://localhost:8080/callback',
-    audience: 'https://team-up.auth0.com/userinfo',
+    // audience: 'https://team-up.auth0.com/userinfo',
     responseType: 'token id_token',
     scope: 'openid'
   })
