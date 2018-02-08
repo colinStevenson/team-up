@@ -1,17 +1,16 @@
 <template>
-  <div class="container-fluid" v-if="loading">Loading...</div>
-  <div class="container-fluid" v-else>
-    <h3>{{Event.team.name}}</h3>
+  <div class="container-fluid" v-if="event && currentAttendance">
+    <h3>{{event.team.name}}</h3>
     <section class="card">
       <div class="card-header">
-        {{Event.name}}
+        {{event.name}}
       </div>
       <div class="card-body">
         <h5 class="card-title">
-          Time: {{$moment(Event.time).format('MMM Do [at] hh:mma')}}
+          Time: {{$moment(event.time).format('MMM Do [at] hh:mma')}}
         </h5>
         <h5 class="card-title">
-          Location: {{Event.location}}
+          Location: {{event.location}}
         </h5>
       </div>
       <div class="card-body">
@@ -25,7 +24,6 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
-import Queries from '../queries'
 
 export default {
   name: 'Event',
@@ -36,22 +34,6 @@ export default {
       event: 'event',
       currentAttendance: 'currentAttendance'
     })
-  },
-  data () {
-    return {
-      loading: 0,
-      Event: {}
-    }
-  },
-  apollo: {
-    Event: {
-      query: Queries.EVENT_BY_ID,
-      variables () {
-        return {
-          id: this.id
-        }
-      }
-    }
   },
   methods: {
     requestAttendances () {
@@ -66,6 +48,7 @@ export default {
     }
   },
   mounted () {
+    this.$store.dispatch('getEvent', this.id)
     this.requestAttendances()
   }
 }
