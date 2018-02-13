@@ -14,6 +14,23 @@ const getters = {
 }
 
 const actions = {
+  createUser (context, {idToken, email, firstName, lastName, gender, callback}) {
+    apolloClient.mutate({
+      mutation: Queries.CREATE_USER,
+      variables: {
+        idToken,
+        email,
+        firstName,
+        lastName,
+        gender
+      }
+    }).then(response => {
+      if (response && response.data && response.data.createUser && response.data.createUser.id) {
+        context.dispatch('getUser')
+        callback(response.data.createUser)
+      }
+    })
+  },
   addUserToTeam (context, {invitationId, userId, teamId}) {
     apolloClient.mutate({
       mutation: Queries.ADD_USER_TO_TEAM,
