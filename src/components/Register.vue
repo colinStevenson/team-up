@@ -42,7 +42,7 @@
   </div>
 </template>
 <script>
-import Queries from '../queries'
+import { mapActions } from 'vuex'
 export default {
   name: 'Register',
   props: ['auth'],
@@ -55,26 +55,21 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      createUser: 'createUser'
+    }),
     handleSubmit () {
-      this.$apollo.mutate({
-        mutation: Queries.CREATE_USER,
-        variables: {
-          idToken: this.auth.getIdToken(),
-          email: this.email,
-          firstName: this.firstName,
-          lastName: this.lastName,
-          gender: this.gender
-        }
-      }).then((response) => {
-        if (response && response.data && response.data.createUser && response.data.createUser.id) {
-          this.$store.dispatch('getUser')
-          this.$router.push({ name: 'Teams' })
-        } else {
-          // Something went wrong, deal with it
-        }
-      }).catch((error) => {
-        console.error(error)
+      this.createUser({
+        idToken: this.auth.getIdToken(),
+        email: this.email,
+        firstName: this.firstName,
+        lastName: this.lastName,
+        gender: this.gender,
+        callback: this.handleUserCreation
       })
+    },
+    handleUserCreation () {
+      this.$router.push({ name: 'Teams' })
     }
   },
   mounted () {
