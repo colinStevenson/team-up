@@ -4,6 +4,7 @@ import events from './modules/events'
 import invitations from './modules/invitations'
 import teams from './modules/teams'
 import user from './modules/user'
+import attendances from './modules/attendances'
 import roles from './modules/roles'
 // import gql from 'graphql-tag'
 
@@ -15,7 +16,8 @@ const store = new Vuex.Store({
     invitations,
     roles,
     teams,
-    user
+    user,
+    attendances
   },
   state: {},
   getters: {},

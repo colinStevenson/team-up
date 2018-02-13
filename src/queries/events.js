@@ -5,7 +5,11 @@ const EVENT_BY_ID = gql`
     Event(id: $id) {
       id
       name,
-      time
+      time,
+      location,
+      team {
+        id, name
+      }
     }
   }
 `

@@ -27,7 +27,7 @@
         </div>
       </div>
       <div v-else>
-        <button class="btn btn-primary card-link" @click="toggleInviting">Invite people</button>
+        <button class="btn btn-outline-info card-link" @click="toggleInviting">Invite people</button>
       </div>
     </div>
   </section>
