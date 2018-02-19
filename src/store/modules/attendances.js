@@ -21,7 +21,7 @@ const actions = {
         status
       }
     }).then(result => {
-      console.log('hi')
+      console.log('new attendance recorded: ' + status + ' for event ' + eventId)
       context.dispatch('getCurrentAttendance', {eventId, userId, forceNetwork: true})
     })
   },
@@ -36,7 +36,6 @@ const actions = {
     })
   },
   getCurrentAttendance (context, {eventId, userId, forceNetwork}) {
-    console.log(forceNetwork)
     apolloClient.query({
       query: Queries.GET_MOST_RECENT_ATTENDANCE,
       variables: {
