@@ -85,6 +85,6 @@ export default {
   }
 }
 </script>
-<style>
-@import 'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css';
+<style lang='scss'>
+@import './style/app.scss';
 </style>
