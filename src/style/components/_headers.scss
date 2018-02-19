@@ -1,0 +1,15 @@
+// Headers
+//
+// 
+// 
+.page-header{
+  background: $primary;
+  margin: 0 0 $spacer*1;
+  padding: $spacer*2 0;
+
+  h1{
+    color: $light;
+    font-weight: 200;
+    font-size: 2.5rem;
+  }
+}

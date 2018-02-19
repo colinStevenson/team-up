@@ -1,25 +1,31 @@
 <template>
-  <div class="container-fluid" v-if="event">
-    <h3>{{event.team.name}}</h3>
-    <section class="card">
-      <div class="card-header">
-        {{event.name}}
+  <div>
+    <div class="page-header">
+      <div class="container-fluid">
+        <h1>{{event.team.name}}</h1>
       </div>
-      <div class="card-body">
-        <h5 class="card-title">
-          Time: {{$moment(event.time).format('MMM Do [at] hh:mma')}}
-        </h5>
-        <h5 class="card-title">
-          Location: {{event.location}}
-        </h5>
-      </div>
-      <div class="card-body">
-        <div class="h5">Are you in?</div>
-        <button class="btn btn-success btn-lg" :class="{ disabled: attendanceStatus == 'Yes'}" @click="updateEventStatus('Yes')">YES</button>
-        <button class="btn btn-warning btn-lg" :class="{ disabled: attendanceStatus == 'Maybe'}" @click="updateEventStatus('Maybe')">MAYBE</button>
-        <button class="btn btn-danger btn-lg" :class="{ disabled: attendanceStatus == 'No'}" @click="updateEventStatus('No')">NO</button>
-      </div>
-    </section>
+    </div>
+    <div class="container-fluid" v-if="event">
+      <section class="card">
+        <div class="card-header">
+          {{event.name}}
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">
+            Time: {{$moment(event.time).format('MMM Do [at] hh:mma')}}
+          </h5>
+          <h5 class="card-title">
+            Location: {{event.location}}
+          </h5>
+        </div>
+        <div class="card-body">
+          <div class="h5">Are you in?</div>
+          <button class="btn btn-success btn-lg" :class="{ disabled: attendanceStatus == 'Yes'}" @click="updateEventStatus('Yes')">YES</button>
+          <button class="btn btn-warning btn-lg" :class="{ disabled: attendanceStatus == 'Maybe'}" @click="updateEventStatus('Maybe')">MAYBE</button>
+          <button class="btn btn-danger btn-lg" :class="{ disabled: attendanceStatus == 'No'}" @click="updateEventStatus('No')">NO</button>
+        </div>
+      </section>
+    </div>
   </div>
 </template>
 <script>

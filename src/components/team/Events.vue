@@ -1,7 +1,7 @@
 <template>
   <section class="card">
     <div class="card-header">
-      <h3>Games</h3>
+      <h3 class="card-title">Games</h3>
     </div>
     <ul class="list-group list-group-flush">
       <li v-for="event in teamEvents" class="list-group-item d-flex justify-content-between">

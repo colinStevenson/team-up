@@ -1,34 +1,30 @@
 <template>
   <div id="app">
-    <nav class="navbar navbar-light bg-info mb-3">
-      <header class="navbar-header">
-        <div class="d-inline-flex">
-          <router-link :to="'/'" class="navbar-brand">EasyTeam</router-link>  
-        </div>
-        <div class="d-inline-flex">
-          <button
-            type="button"
-            class="btn btn-primary btn-sm"
-            v-if="!authenticated"
-            @click="login()">
-              Log In
-          </button>
-          <button
-            type="button"
-            class="btn btn-success btn-sm ml-2"
-            v-if="!authenticated"
-            @click="register()">
-              Sign up
-          </button>
-          <button
-            type="button"
-            class="btn btn-danger btn-sm"
-            v-if="authenticated"
-            @click="logout()">
-              Log Out
-          </button>
-        </div>
-      </header>
+    <nav class="navbar navbar-light bg-info ">
+      <router-link :to="'/'" class="navbar-brand">EasyTeam</router-link>  
+      <div class="d-inline-flex">
+        <button
+          type="button"
+          class="btn btn-primary btn-sm"
+          v-if="!authenticated"
+          @click="login()">
+            Log In
+        </button>
+        <button
+          type="button"
+          class="btn btn-success btn-sm ml-2"
+          v-if="!authenticated"
+          @click="register()">
+            Sign up
+        </button>
+        <button
+          type="button"
+          class="btn btn-danger btn-sm"
+          v-if="authenticated"
+          @click="logout()">
+            Log Out
+        </button>
+      </div>
     </nav>
     <main v-if="loadingUserData">
       <site-loader></site-loader>
