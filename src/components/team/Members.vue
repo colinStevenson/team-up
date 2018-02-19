@@ -1,6 +1,6 @@
 <template>
   <section class="card" :class="isLoading ? 'loading' : ''">
-    <div class="card-body">
+    <div class="card-header">
       <h3 class="card-title h4">Members</h3>
     </div>
     <ul class="list-group list-group-flush">

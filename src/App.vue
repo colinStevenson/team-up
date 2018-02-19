@@ -3,7 +3,7 @@
     <nav class="navbar navbar-light bg-info mb-3">
       <header class="navbar-header">
         <div class="d-inline-flex">
-          <router-link :to="'/'" class="navbar-brand">TeamUp</router-link>  
+          <router-link :to="'/'" class="navbar-brand">EasyTeam</router-link>  
         </div>
         <div class="d-inline-flex">
           <button
