@@ -21,6 +21,9 @@ const GET_ATTENDANCES_BY_EVENT = gql`
     }) {
       id,
       status,
+      event {
+        id
+      },
       user {
         id,
         email
@@ -46,22 +49,6 @@ const GET_ATTENDANCES_BY_USER = gql`
   }
 `
 
-const GET_ATTENDANCES_BY_EVENT_AND_USER = gql`
-  query AttendancesByEventAndUser($eventId: ID!, $userId: ID!) {
-    allAttendances(filter:{
-      event: {
-        id: $eventId
-      },
-      user: {
-        id: $userId
-      }
-    }) {
-      id,
-      status
-    }
-  }
-`
-
 const GET_MOST_RECENT_ATTENDANCE = gql`
   query AttendancesByEventAndUser($eventId: ID!, $userId: ID!) {
     allAttendances(last: 1, filter:{
@@ -73,7 +60,10 @@ const GET_MOST_RECENT_ATTENDANCE = gql`
       }
     }) {
       id,
-      status
+      status,
+      event {
+        id
+      }
     }
   }
 `
@@ -82,6 +72,5 @@ export default {
   CREATE_ATTENDANCE,
   GET_ATTENDANCES_BY_EVENT,
   GET_ATTENDANCES_BY_USER,
-  GET_ATTENDANCES_BY_EVENT_AND_USER,
   GET_MOST_RECENT_ATTENDANCE
 }

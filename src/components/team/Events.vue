@@ -20,7 +20,7 @@
             {{ $moment(event.time).format('h:mma') }}
           </td>
           <td class="text-center">
-            <attendance-buttons :event-id="event.id" :key="event.id"></attendance-buttons>
+            <attendance-buttons :event-id="event.id"></attendance-buttons>
           </td>
         </tr>
       </tbody>
@@ -84,7 +84,7 @@ export default {
 <style lang="scss">
   .card-header {
     border-bottom: none;
-  },
+  }
   .table td, .table th {
     padding: 0.3rem;
     border-top: none;

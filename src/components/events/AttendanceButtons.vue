@@ -15,11 +15,10 @@ export default {
   computed: {
     ...mapGetters({
       user: 'user',
-      event: 'event',
-      currentAttendance: 'currentAttendance'
+      attendancesByEventId: 'attendancesByEventId'
     }),
     attendanceStatus () {
-      const attendance = this.currentAttendance
+      const attendance = this.attendancesByEventId[this.eventId]
       return attendance ? attendance.status : null
     }
   },
@@ -36,9 +35,7 @@ export default {
     }
   },
   mounted () {
-    console.log('Attendances.vue mounted this.eventId: ' + this.eventId)
-    this.$store.dispatch('getEvent', this.eventId)
-    this.$store.dispatch('getCurrentAttendance', {eventId: this.eventId, userId: this.user.id})
+    this.$store.dispatch('getAttendancesByEventId', {eventId: this.eventId, userId: this.user.id})
   }
 }
 </script>

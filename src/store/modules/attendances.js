@@ -2,13 +2,11 @@ import Queries from '../../queries'
 import apolloClient from '../../apollo'
 
 const state = {
-  attendances: null,
-  currentAttendance: null
+  attendancesByEventId: {}
 }
 
 const getters = {
-  attendances: state => state.attendances,
-  currentAttendance: state => state.currentAttendance
+  attendancesByEventId: state => state.attendancesByEventId
 }
 
 const actions = {
@@ -21,21 +19,10 @@ const actions = {
         status
       }
     }).then(result => {
-      console.log('new attendance recorded: ' + status + ' for event ' + eventId)
-      context.dispatch('getCurrentAttendance', {eventId, userId, forceNetwork: true})
+      context.dispatch('getAttendancesByEventId', {eventId, userId, forceNetwork: true})
     })
   },
-  getAttendances (context, eventId) {
-    apolloClient.query({
-      query: Queries.GET_ATTENDANCES_BY_EVENT,
-      variables: {
-        eventId
-      }
-    }).then((result) => {
-      context.commit('SET_EVENT_ATTENDANCES', result.data.allAttendances)
-    })
-  },
-  getCurrentAttendance (context, {eventId, userId, forceNetwork}) {
+  getAttendancesByEventId (context, {eventId, userId, forceNetwork}) {
     apolloClient.query({
       query: Queries.GET_MOST_RECENT_ATTENDANCE,
       variables: {
@@ -44,17 +31,20 @@ const actions = {
       },
       fetchPolicy: forceNetwork ? 'network-only' : 'cache-first'
     }).then((result) => {
-      context.commit('SET_CURRENT_ATTENDANCE', result.data.allAttendances[0])
+      context.commit('SET_EVENT_ATTENDANCES', result.data.allAttendances)
     })
   }
 }
 
 const mutations = {
   SET_EVENT_ATTENDANCES (state, attendances) {
-    state.attendances = attendances
-  },
-  SET_CURRENT_ATTENDANCE (state, currentAttendance) {
-    state.currentAttendance = currentAttendance
+    attendances.forEach(attendance => {
+      state.attendancesByEventId[attendance.event.id] = attendance
+      // NOTE: we added const temp and Object.assign() because attendancesByEventId wasn't updating correctly
+      const temp = {}
+      temp[attendance.event.id] = attendance
+      state.attendancesByEventId = Object.assign(temp, state.attendancesByEventId, {})
+    })
   }
 }
 

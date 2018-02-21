@@ -8,8 +8,8 @@
             <section>
               {{ event.name }}
               <button v-if="attendanceStatus == 'Yes'" class="btn btn-success btn-sm float-right role='button' aria-pressed='true'">I'll be there!</button>
-              <button v-if="attendanceStatus == 'Maybe'" class="btn btn-warning btn-sm float-right role='button' aria-pressed='true'">I'm not sure</button>
-              <button v-if="attendanceStatus == 'No'" class="btn btn-danger btn-sm float-right role='button' aria-pressed='true'">I can't make it</button>
+              <button v-if="attendanceStatus == 'Maybe'" class="btn btn-warning btn-sm float-right role='button' aria-pressed='true'">I'm not sure if i can make it...</button>
+              <button v-if="attendanceStatus == 'No'" class="btn btn-danger btn-sm float-right role='button' aria-pressed='true'">Sorry, I can't make it!</button>
             </section>
           </div>
           <div class="card-body h3">
@@ -26,8 +26,8 @@
               <dt class="col-sm-5">My Status</dt>
               <dd class="col-sm-7"><attendance-buttons :event-id="id"></attendance-buttons></dd>
 
-              <dt class="col-sm-5">More Info</dt>
-              <dd class="col-sm-7"></dd>
+              <dt class="col-sm-5">Description</dt>
+              <dd class="col-sm-7">{{ event.description }}</dd>
             </dl>
           </div>
         </section>
@@ -49,17 +49,16 @@ export default {
     ...mapGetters({
       user: 'user',
       event: 'event',
-      currentAttendance: 'currentAttendance'
+      attendancesByEventId: 'attendancesByEventId'
     }),
     attendanceStatus () {
-      console.log('computing currentAttendance: ' + this.currentAttendance.status)
-      const attendance = this.currentAttendance
+      const attendance = this.attendancesByEventId[this.id]
       return attendance ? attendance.status : null
     }
   },
   mounted () {
     this.$store.dispatch('getEvent', this.id)
-    this.$store.dispatch('getCurrentAttendance', {eventId: this.id, userId: this.user.id})
+    this.$store.dispatch('getAttendancesByEventId', {eventId: this.id, userId: this.user.id})
   }
 }
 </script>
