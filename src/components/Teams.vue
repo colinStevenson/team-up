@@ -1,11 +1,12 @@
 <template>
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-sm">
+  <div>
+    <div class="page-header">
+      <div class="container-fluid">
+        <h1>My Teams</h1>
+      </div>
+    </div>
+     <div class="container-fluid">
         <section class="card">
-          <div class="card-body">
-            <h2 class="card-title">My Teams</h2>
-          </div>
           <ul class="list-group list-group-flush">
               <li v-for="team in teams" class="list-group-item">
                 <router-link :to="`/team/${team.id}`">{{team.name}}</router-link>
@@ -28,7 +29,6 @@
               </li>
           </ul>
         </section>
-      </div>
     </div>
   </div>
 </template>
@@ -44,17 +44,14 @@ export default {
       teams: 'teams',
       invitations: 'invitations',
       acceptedInvitations: 'acceptedInvitations'
-    })
+    }),
+    hasTeamsOrInvites () {
+      return this.teams && this.invitations
+    }
   },
   mounted () {
     if (this.user) {
       this.requestTeams()
-    }
-  },
-  data () {
-    return {
-      loading: true,
-      allTeams: []
     }
   },
   methods: {
@@ -68,6 +65,16 @@ export default {
         teamId,
         userId: this.user.id
       })
+    },
+    checkRedirect () {
+      if (
+        this.teams &&
+        this.teams.length === 1 &&
+        this.invitations &&
+        this.invitations.length === 0
+      ) {
+        this.$router.replace(`/team/${this.teams[0].id}`)
+      }
     }
   },
   mixins: [
@@ -78,6 +85,12 @@ export default {
       if (this.user) {
         this.requestTeams()
       }
+    },
+    invitations () {
+      this.checkRedirect()
+    },
+    teams () {
+      this.checkRedirect()
     }
   }
 }
