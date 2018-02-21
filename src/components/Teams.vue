@@ -1,11 +1,12 @@
 <template>
-  <div class="container-fluid" v-if="hasTeamsOrInvites">
-    <div class="row">
-      <div class="col-sm">
+  <div>
+    <div class="page-header">
+      <div class="container-fluid">
+        <h1>My Teams</h1>
+      </div>
+    </div>
+     <div class="container-fluid">
         <section class="card">
-          <div class="card-body">
-            <h2 class="card-title">My Teams</h2>
-          </div>
           <ul class="list-group list-group-flush">
               <li v-for="team in teams" class="list-group-item">
                 <router-link :to="`/team/${team.id}`">{{team.name}}</router-link>
@@ -28,7 +29,6 @@
               </li>
           </ul>
         </section>
-      </div>
     </div>
   </div>
 </template>
