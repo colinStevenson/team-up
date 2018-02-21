@@ -44,17 +44,14 @@ export default {
       teams: 'teams',
       invitations: 'invitations',
       acceptedInvitations: 'acceptedInvitations'
-    })
+    }),
+    hasTeamsOrInvites () {
+      return this.teams && this.invitations
+    }
   },
   mounted () {
     if (this.user) {
       this.requestTeams()
-    }
-  },
-  data () {
-    return {
-      loading: true,
-      allTeams: []
     }
   },
   methods: {
@@ -68,6 +65,16 @@ export default {
         teamId,
         userId: this.user.id
       })
+    },
+    checkRedirect () {
+      if (
+        this.teams &&
+        this.teams.length === 1 &&
+        this.invitations &&
+        this.invitations.length === 0
+      ) {
+        this.$router.replace(`/team/${this.teams[0].id}`)
+      }
     }
   },
   mixins: [
@@ -78,6 +85,12 @@ export default {
       if (this.user) {
         this.requestTeams()
       }
+    },
+    invitations () {
+      this.checkRedirect()
+    },
+    teams () {
+      this.checkRedirect()
     }
   }
 }
