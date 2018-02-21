@@ -1,15 +1,21 @@
 <template>
-  <div class="container-fluid" v-if="hasSufficientData">
-    <h1>{{team.name}}</h1>
-    <div class="row">
-      <div class="col-sm-6">
-        <events :team-id="id"></events>
-      </div>
-      <div class="col-sm-6">
-        <members :team-id="id"></members>
+  <div>
+    <div class="page-header">
+        <div class="container-fluid">
+          <h1>{{team.name}}</h1>
+        </div>
+    </div>
+    <div class="container-fluid" v-if="hasSufficientData">
+      <h1>{{team.name}}</h1>
+      <div class="row">
+        <div class="col-sm-6">
+          <events :team-id="id"></events>
+        </div>
+        <div class="col-sm-6">
+          <members :team-id="id"></members>
+        </div>
       </div>
     </div>
-
   </div>
 </template>
 <script>
