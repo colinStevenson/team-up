@@ -1,9 +1,4 @@
 <template>
-  <!-- <section>
-    <button class="btn btn-outline-success" :class="{ 'active': attendanceStatus == 'Yes'}" @click="updateEventStatus('Yes')">YES</button>
-    <button class="btn btn-outline-warning" :class="{ 'active': attendanceStatus == 'Maybe'}" @click="updateEventStatus('Maybe')">MAYBE</button>
-    <button class="btn btn-outline-danger" :class="{ 'active': attendanceStatus == 'No'}" @click="updateEventStatus('No')">NO</button>
-  </section> -->
   <div class="attendance-control">
     <input 
       class="yes"
