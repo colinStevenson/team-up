@@ -1,9 +1,24 @@
 <template>
-  <section>
+  <!-- <section>
     <button class="btn btn-outline-success" :class="{ 'active': attendanceStatus == 'Yes'}" @click="updateEventStatus('Yes')">YES</button>
     <button class="btn btn-outline-warning" :class="{ 'active': attendanceStatus == 'Maybe'}" @click="updateEventStatus('Maybe')">MAYBE</button>
     <button class="btn btn-outline-danger" :class="{ 'active': attendanceStatus == 'No'}" @click="updateEventStatus('No')">NO</button>
-  </section>
+  </section> -->
+  <div class="attendance-control">
+    <input 
+      class="yes"
+      :disabled="isLoading"
+      type="radio" 
+      :name="inputName" 
+      :id="`${eventId}-yes`" 
+      value="Yes" 
+      v-model="status">
+    <label :for="`${eventId}-yes`">Yes</label>
+    <input class="maybe" type="radio" :name="inputName" :id="`${eventId}-maybe`" value="Maybe" v-model="status">
+    <label :for="`${eventId}-maybe`">Maybe</label>
+    <input class="no" type="radio" :name="inputName" :id="`${eventId}-no`" value="No" v-model="status">
+    <label :for="`${eventId}-no`">No</label>
+  </div>
 </template>
 
 <script>
@@ -17,9 +32,14 @@ export default {
       user: 'user',
       attendancesByEventId: 'attendancesByEventId'
     }),
-    attendanceStatus () {
-      const attendance = this.attendancesByEventId[this.eventId]
-      return attendance ? attendance.status : null
+    inputName () {
+      return `${this.eventId}-control`
+    }
+  },
+  data () {
+    return {
+      isLoading: true,
+      status: null
     }
   },
   methods: {
@@ -36,6 +56,20 @@ export default {
   },
   mounted () {
     this.$store.dispatch('getAttendancesByEventId', {eventId: this.eventId, userId: this.user.id})
+  },
+  watch: {
+    status (newVal, oldVal) {
+      if (oldVal !== newVal) {
+        this.updateEventStatus(this.status)
+      }
+    },
+    attendancesByEventId () {
+      const attendance = this.attendancesByEventId[this.eventId]
+      if (attendance && attendance.status) {
+        this.status = attendance.status
+      }
+      this.isLoading = false
+    }
   }
 }
 </script>

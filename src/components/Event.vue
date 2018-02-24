@@ -2,20 +2,20 @@
   <div>
     <div class="page-header">
       <div class="container-fluid">
-        <h1>{{event.team.name}}</h1>
+        <h1>
+          {{event.name}}
+        </h1>
       </div>
     </div>
     <div class="container-fluid" v-if="event">
-      <h3>{{ event.team.name }}</h3>
       <div class="row">
         <div class="col-sm-6">
           <section class="card">
             <div class="card-header">
               <section>
-                {{ event.name }}
-                <button v-if="attendanceStatus == 'Yes'" class="btn btn-success btn-sm float-right role='button' aria-pressed='true'">I'll be there!</button>
-                <button v-if="attendanceStatus == 'Maybe'" class="btn btn-warning btn-sm float-right role='button' aria-pressed='true'">I'm not sure if i can make it...</button>
-                <button v-if="attendanceStatus == 'No'" class="btn btn-danger btn-sm float-right role='button' aria-pressed='true'">Sorry, I can't make it!</button>
+                <span v-if="attendanceStatus == 'Yes'" class="badge badge-success">I'll be there!</span>
+                <span v-if="attendanceStatus == 'Maybe'" class="badge badge-secondary">I'm not sure if i can make it...</span>
+                <span v-if="attendanceStatus == 'No'" class="badge badge-danger">Sorry, I can't make it!</span>
               </section>
             </div>
             <div class="card-body h3">

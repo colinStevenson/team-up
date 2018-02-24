@@ -46,23 +46,23 @@
   </div>
 </template>
 <script>
-import { mapActions } from "vuex";
+import { mapActions } from 'vuex'
 export default {
-  name: "Register",
-  props: ["auth"],
-  data() {
+  name: 'Register',
+  props: ['auth'],
+  data () {
     return {
       email: null,
       firstName: null,
       lastName: null,
       gender: null
-    };
+    }
   },
   methods: {
     ...mapActions({
-      createUser: "createUser"
+      createUser: 'createUser'
     }),
-    handleSubmit() {
+    handleSubmit () {
       this.createUser({
         idToken: this.auth.getIdToken(),
         email: this.email,
@@ -70,16 +70,16 @@ export default {
         lastName: this.lastName,
         gender: this.gender,
         callback: this.handleUserCreation
-      });
+      })
     },
-    handleUserCreation() {
-      this.$router.push({ name: "Teams" });
+    handleUserCreation () {
+      this.$router.push({ name: 'Teams' })
     }
   },
-  mounted() {
+  mounted () {
     if (!this.auth.getIdToken()) {
-      this.auth.login();
+      this.auth.login()
     }
   }
-};
+}
 </script>
