@@ -1,12 +1,11 @@
 <template>
-  <div>
+  <div v-if="hasSufficientData">
     <div class="page-header">
         <div class="container-fluid">
           <h1>{{team.name}}</h1>
         </div>
     </div>
-    <div class="container-fluid" v-if="hasSufficientData">
-      <h1>{{team.name}}</h1>
+    <div class="container-fluid">
       <div class="row">
         <div class="col-sm-6">
           <events :team-id="id"></events>

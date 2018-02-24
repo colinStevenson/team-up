@@ -2,6 +2,9 @@
 // 
 //
 .card{
+  .card-header{
+    border-bottom: 1px solid $card-border-color;
+  }
   .card-title{
     font-weight: 200;
     margin: 0;

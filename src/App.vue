@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <nav class="navbar navbar-light bg-info ">
-      <router-link :to="'/'" class="navbar-brand">EasyTeam</router-link>  
+    <nav class="navbar navbar-light navbar-primary bg-info">
+      <router-link :to="'/'" class="navbar-brand">TeamApp*</router-link>  
       <div class="d-inline-flex">
         <button
           type="button"

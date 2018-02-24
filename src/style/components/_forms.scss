@@ -1,0 +1,87 @@
+// Forms
+//
+
+// Attendance Control
+$attendance-control-button-size: 54px;
+.attendance-control{
+  display: flex;
+  input{
+    position:absolute;
+    clip: rect(0,0,0,0);
+    clip: rect(0 0 0 0);
+  } 
+  input + label{
+    cursor: pointer;
+    display: inline-block;
+    height: $attendance-control-button-size;
+    width: $attendance-control-button-size;
+    font-size: 0;
+    border: 1px solid $card-border-color;
+    border-width: 0 1px 0 0;
+    position: relative;
+    transition: all 0.2s ease-in;
+    margin: 0;
+    
+    &:last-of-type{
+      border-width: 0;
+    }
+    
+    &:before{
+      color: $gray-500;
+      position: absolute;
+      font-size: 2rem;
+      font-weight: 200;
+      line-height: $attendance-control-button-size;
+      text-align: center;
+      width: $attendance-control-button-size;
+    }
+  }
+  input:checked + label {
+    &:before{
+      color: $primary;
+    }
+  }
+  input:disabled + label {
+    cursor: default;
+    opacity: 0.6;
+  }
+  input.yes{
+    &+label{
+       &:before{
+        content: '\2713';
+      } 
+    }
+    &:checked + label{
+      background: theme-color("positive"); 
+    }
+  }
+  input.maybe{
+    &+label{
+     &:before{
+        content: '?'; 
+      }
+    }
+    &:checked + label{
+      background: $gray-400; 
+    }
+  }
+  input.no{
+    &+label{
+     &:before{
+       content: '\2715'; 
+      }
+    }
+    &:checked + label{
+      background: theme-color("negative"); 
+    }
+  }
+  input:checked + label{
+    cursor: default;
+  }
+}
+// Spacing/ positioning
+.list-group-item > .attendance-control{
+  margin-right: -($list-group-item-padding-x);
+  margin-top: -($list-group-item-padding-y);
+  margin-bottom: -($list-group-item-padding-y);
+}
