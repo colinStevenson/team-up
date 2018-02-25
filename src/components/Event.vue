@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="event">
     <div class="page-header">
       <div class="container-fluid">
         <h1>
@@ -7,7 +7,7 @@
         </h1>
       </div>
     </div>
-    <div class="container-fluid" v-if="event">
+    <div class="container-fluid">
       <div class="row">
         <div class="col-sm-6">
           <section class="card">
@@ -30,7 +30,7 @@
                 <dd class="col-sm-7">{{ event.location || "Pleasant View" }}</dd>
 
                 <dt class="col-sm-5">My Status</dt>
-                <dd class="col-sm-7"><attendance-buttons :event-id="id"></attendance-buttons></dd>
+                <dd class="col-sm-7"><attendance-buttons :event-id="id" :team-id="event.team.id"></attendance-buttons></dd>
 
                 <dt class="col-sm-5">Description</dt>
                 <dd class="col-sm-7">{{ event.description }}</dd>
@@ -43,12 +43,16 @@
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import AttendanceButtons from './events/AttendanceButtons'
 
 export default {
   name: 'Event',
-  props: ['id'],
+  props: {
+    id: {
+      required: true
+    }
+  },
   components: {
     AttendanceButtons
   },
@@ -63,9 +67,15 @@ export default {
       return attendance ? attendance.status : null
     }
   },
+  methods: {
+    ...mapActions([
+      'getEvent',
+      'getAttendancesByEventId'
+    ])
+  },
   mounted () {
-    this.$store.dispatch('getEvent', this.id)
-    this.$store.dispatch('getAttendancesByEventId', {eventId: this.id, userId: this.user.id})
+    this.getEvent(this.id)
+    this.getAttendancesByEventId({eventId: this.id, userId: this.user.id})
   }
 }
 </script>
