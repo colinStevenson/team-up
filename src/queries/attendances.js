@@ -1,15 +1,27 @@
 import gql from 'graphql-tag'
 
 const CREATE_ATTENDANCE = gql`
-  mutation ($eventId: ID!, $userId: ID!, $status: EventStatus!) {
+  mutation ($eventId: ID!, $userId: ID!, $status: EventStatus!, $teamId: ID!) {
     createAttendance(
       eventId: $eventId,
       userId: $userId,
-      status: $status
+      status: $status,
+      teamId: $teamId
     ){
       id
     }
   }
+`
+
+const UPDATE_ATTENDANCE = gql`
+mutation ($attendanceId: ID!, $status: EventStatus!) {
+  updateAttendance(
+    id: $attendanceId,
+    status: $status
+  ){
+    id
+  }
+}
 `
 
 const GET_ATTENDANCES_BY_EVENT = gql`
@@ -70,6 +82,7 @@ const GET_MOST_RECENT_ATTENDANCE = gql`
 
 export default {
   CREATE_ATTENDANCE,
+  UPDATE_ATTENDANCE,
   GET_ATTENDANCES_BY_EVENT,
   GET_ATTENDANCES_BY_USER,
   GET_MOST_RECENT_ATTENDANCE
