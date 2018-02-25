@@ -1,11 +1,11 @@
 <template>
   <div v-if="hasSufficientData">
     <div class="page-header">
-        <div class="container-fluid">
+        <div class="container">
           <h1>{{team.name}}</h1>
         </div>
     </div>
-    <div class="container-fluid">
+    <div class="container">
       <div class="row">
         <div class="col-sm-6">
           <events :team-id="id"></events>
@@ -30,10 +30,10 @@ export default {
     Members
   },
   computed: {
-    ...mapGetters({
-      team: 'team',
-      user: 'user'
-    }),
+    ...mapGetters([
+      'team',
+      'user'
+    ]),
     hasSufficientData () {
       return !!this.team
     }

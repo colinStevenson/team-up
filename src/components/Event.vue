@@ -1,44 +1,62 @@
 <template>
-  <div>
+  <div v-if="hasSufficientData">
     <div class="page-header">
-      <div class="container-fluid">
+      <div class="container">
         <h1>
-          {{event.name}}
+          {{event.team.name}}
         </h1>
       </div>
     </div>
-    <div class="container-fluid" v-if="event">
-      <div class="row">
-        <div class="col-sm-6">
-          <section class="card">
-            <div class="card-header">
-              <section>
-                <span v-if="attendanceStatus == 'Yes'" class="badge badge-success">I'll be there!</span>
-                <span v-if="attendanceStatus == 'Maybe'" class="badge badge-secondary">I'm not sure if i can make it...</span>
-                <span v-if="attendanceStatus == 'No'" class="badge badge-danger">Sorry, I can't make it!</span>
-              </section>
+    <div class="container">
+        <section class="card">
+          <div class="card-header d-flex justify-content-between">
+            <h2 class="h3 card-title">
+              {{event.name}}
+              <small></small>
+            </h2>
+            <attendance-buttons :event-id="id"></attendance-buttons>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-4">
+                <table class="table table-nv">
+                  <caption class="sr-only">Event details</caption>
+                  <tbody>
+                    <tr>
+                      <th scope="row">When</th>
+                      <td>{{ $moment(event.time).format('MMM Do h:mma') }}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Where</th>
+                      <td>{{ event.location || '--' }}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">What</th>
+                      <td>{{ event.description || '--' }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="col-md-8 d-flex justify-content-between">
+                <ul class="list-group">
+                  <li class="list-group-item list-group-item-success">
+                    <h3 class="h5 mb-0">In</h3>
+                  </li>
+                </ul>
+                <ul class="list-group">
+                  <li class="list-group-item list-group-item-danger">
+                    <h3 class="h5 mb-0">Out</h3>
+                  </li>
+                </ul>
+                <ul class="list-group">
+                  <li class="list-group-item list-group-item-primary">
+                    <h3 class="h5 mb-0">Maybe</h3>
+                  </li>
+                </ul>
+              </div>
             </div>
-            <div class="card-body h3">
-              <dl class="row">
-                <dt class="col-sm-5">Date</dt>
-                <dd class="col-sm-7">{{ $moment(event.time).format('MMM Do') }}</dd>
-
-                <dt class="col-sm-5">Time</dt>
-                <dd class="col-sm-7">{{ $moment(event.time).format('h:mma') }}</dd>
-
-                <dt class="col-sm-5">Location</dt>
-                <dd class="col-sm-7">{{ event.location || "Pleasant View" }}</dd>
-
-                <dt class="col-sm-5">My Status</dt>
-                <dd class="col-sm-7"><attendance-buttons :event-id="id"></attendance-buttons></dd>
-
-                <dt class="col-sm-5">Description</dt>
-                <dd class="col-sm-7">{{ event.description }}</dd>
-              </dl>
-            </div>
-          </section>
-        </div>
-      </div>
+          </div>
+        </section>
     </div>
   </div>
 </template>
@@ -53,17 +71,22 @@ export default {
     AttendanceButtons
   },
   computed: {
-    ...mapGetters({
-      user: 'user',
-      event: 'event',
-      attendancesByEventId: 'attendancesByEventId'
-    }),
+    ...mapGetters([
+      'user',
+      'event',
+      'attendancesByEventId',
+      'team'
+    ]),
     attendanceStatus () {
       const attendance = this.attendancesByEventId[this.id]
       return attendance ? attendance.status : null
+    },
+    hasSufficientData () {
+      return !!this.event
     }
   },
   mounted () {
+    this.$store.dispatch('getTeam', this.id)
     this.$store.dispatch('getEvent', this.id)
     this.$store.dispatch('getAttendancesByEventId', {eventId: this.id, userId: this.user.id})
   }
