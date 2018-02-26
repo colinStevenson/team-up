@@ -1,5 +1,5 @@
 <template>
-  <div class="spinner">
+  <div class="container">
     Authenticating...
   </div>
 </template>
