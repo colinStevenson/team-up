@@ -1,10 +1,10 @@
 <template>
   <section class="card">
     <div class="card-header">
-      <h3 class="card-title">Games</h3>
+      <h3 class="card-title">Upcoming Games</h3>
     </div>
     <ul class="list-group list-group-flush">
-      <li class="list-group-item d-flex justify-content-between" v-for="event in teamEvents">
+      <li class="list-group-item d-flex justify-content-between" v-for="event in upcomingEvents">
         <router-link :to="`/event/${event.id}`">{{event.name}}</router-link>
         <div>
           <strong>{{ $moment(event.time).format('MMM Do') }}</strong>
@@ -33,15 +33,27 @@
 <script>
 import { mapGetters } from 'vuex'
 import AttendanceButtons from './../events/AttendanceButtons'
+import moment from 'moment'
 
 export default {
   components: {
     AttendanceButtons
   },
   computed: {
-    ...mapGetters({
-      teamEvents: 'teamEvents'
-    })
+    ...mapGetters([
+      'teamEvents'
+    ]),
+    upcomingEvents () {
+      let val = this.teamEvents || []
+      const today = new Date()
+      today.setHours(0)
+      today.setMinutes(0)
+      today.setSeconds(0)
+      return val.filter(event => {
+        const eventDate = moment(event.time)
+        return eventDate.isAfter(today)
+      })
+    }
   },
   data () {
     return {
