@@ -1,11 +1,11 @@
 <template>
   <div>
     <div class="page-header">
-      <div class="container-fluid">
+      <div class="container">
         <h1>My Teams</h1>
       </div>
     </div>
-     <div class="container-fluid">
+     <div class="container">
         <section class="card">
           <ul class="list-group list-group-flush">
               <li v-for="team in teams" class="list-group-item">

@@ -1,29 +1,31 @@
 <template>
   <div id="app">
     <nav class="navbar navbar-light navbar-primary bg-info">
-      <router-link :to="'/'" class="navbar-brand">TeamApp*</router-link>  
-      <div class="d-inline-flex">
-        <button
-          type="button"
-          class="btn btn-primary btn-sm"
-          v-if="!authenticated"
-          @click="login()">
-            Log In
-        </button>
-        <button
-          type="button"
-          class="btn btn-success btn-sm ml-2"
-          v-if="!authenticated"
-          @click="register()">
-            Sign up
-        </button>
-        <button
-          type="button"
-          class="btn btn-danger btn-sm"
-          v-if="authenticated"
-          @click="logout()">
-            Log Out
-        </button>
+      <div class="container">
+        <router-link :to="'/'" class="navbar-brand">TeamApp*</router-link>  
+        <div class="d-inline-flex">
+          <button
+            type="button"
+            class="btn btn-primary btn-sm"
+            v-if="!authenticated"
+            @click="login()">
+              Log In
+          </button>
+          <button
+            type="button"
+            class="btn btn-success btn-sm ml-2"
+            v-if="!authenticated"
+            @click="register()">
+              Sign up
+          </button>
+          <button
+            type="button"
+            class="btn btn-danger btn-sm"
+            v-if="authenticated"
+            @click="logout()">
+              Log Out
+          </button>
+        </div>
       </div>
     </nav>
     <main v-if="loadingUserData">

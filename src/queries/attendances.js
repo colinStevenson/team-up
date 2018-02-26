@@ -39,6 +39,8 @@ const GET_ATTENDANCES_BY_EVENT = gql`
       user {
         id,
         email
+        firstName,
+        lastName
       }
     }
   }

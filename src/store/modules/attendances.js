@@ -3,12 +3,14 @@ import apolloClient from '../../apollo'
 
 const state = {
   attendancesByEventId: {},
-  loadingAttendancesByEventId: {}
+  loadingAttendancesByEventId: {},
+  teamAttendanceByEvent: {}
 }
 
 const getters = {
   attendancesByEventId: state => state.attendancesByEventId,
-  loadingAttendancesByEventId: state => state.loadingAttendancesByEventId
+  loadingAttendancesByEventId: state => state.loadingAttendancesByEventId,
+  teamAttendanceByEvent: state => state.teamAttendanceByEvent
 }
 
 const actions = {
@@ -23,6 +25,7 @@ const actions = {
       }
     }).then(result => {
       context.dispatch('getAttendancesByEventId', {eventId, userId, forceNetwork: true})
+      context.dispatch('getTeamAttendanceByEvent', {eventId, forceNetwork: true})
     })
   },
   updateAttendance (context, {attendanceId, eventId, userId, status}) {
@@ -34,6 +37,7 @@ const actions = {
       }
     }).then(result => {
       context.dispatch('getAttendancesByEventId', {eventId, userId, forceNetwork: true})
+      context.dispatch('getTeamAttendanceByEvent', {eventId, forceNetwork: true})
     })
   },
   getAttendancesByEventId (context, {eventId, userId, forceNetwork}) {
@@ -52,6 +56,17 @@ const actions = {
       context.commit('SET_ATTENDANCE_LOADING', {eventId, isLoading: false})
       console.error(error)
     })
+  },
+  getTeamAttendanceByEvent (context, {eventId, forceNetwork}) {
+    apolloClient.query({
+      query: Queries.GET_ATTENDANCES_BY_EVENT,
+      variables: {
+        eventId
+      },
+      fetchPolicy: forceNetwork ? 'network-only' : 'cache-first'
+    }).then(result => {
+      context.commit('SET_TEAM_EVENT_ATTENDANCE', {eventId, attendances: result.data.allAttendances})
+    })
   }
 }
 
@@ -67,6 +82,11 @@ const mutations = {
   SET_ATTENDANCE_LOADING (state, {eventId, isLoading}) {
     state.loadingAttendancesByEventId[eventId] = isLoading
     state.loadingAttendancesByEventId = Object.assign({}, state.loadingAttendancesByEventId)
+  },
+  SET_TEAM_EVENT_ATTENDANCE (state, {eventId, attendances}) {
+    const newVal = {}
+    newVal[eventId] = attendances
+    state.teamAttendanceByEvent = Object.assign({}, state.teamAttendanceByEvent, newVal)
   }
 }
 

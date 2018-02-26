@@ -4,9 +4,23 @@
 .card{
   .card-header{
     border-bottom: 1px solid $card-border-color;
+    align-items: center;
+
+    > .attendance-control{
+      margin-right: -($card-spacer-x);
+      margin-bottom: -($card-spacer-y*2);
+      position: relative;
+      top: -($card-spacer-y);
+    }
   }
   .card-title{
     font-weight: 200;
     margin: 0;
+
+    > small,
+    > .small{
+      font-weight: 200;
+      font-size: 60%;
+    }
   }
 }

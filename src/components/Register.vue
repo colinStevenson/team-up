@@ -1,11 +1,11 @@
 <template>
   <div>
     <div class="page-header">
-      <div class="container-fluid">
+      <div class="container">
         <h1>Register</h1>
       </div>
     </div>
-    <div class="container-fluid">
+    <div class="container">
       <section class="card">
         <div class="card-body">
           <div class="form-group">
