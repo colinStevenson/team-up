@@ -10,7 +10,7 @@
           <strong>{{ $moment(event.time).format('MMM Do') }}</strong>
             {{ $moment(event.time).format('h:mma') }}
         </div>
-        <attendance-buttons :event-id="event.id"></attendance-buttons>
+        <attendance-buttons :event-id="event.id" :team-id="teamId"></attendance-buttons>
       </li>
     </ul>
     <div class="card-body">

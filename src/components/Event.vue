@@ -14,7 +14,7 @@
               {{event.name}}
               <small></small>
             </h2>
-            <attendance-buttons :event-id="id"></attendance-buttons>
+            <attendance-buttons :event-id="id" :team-id="event.team.id"></attendance-buttons>
           </div>
           <div class="card-body">
             <div class="row">
@@ -37,21 +37,27 @@
                   </tbody>
                 </table>
               </div>
-              <div class="col-md-8 d-flex justify-content-between">
-                <ul class="list-group">
-                  <li class="list-group-item list-group-item-success">
-                    <h3 class="h5 mb-0">In</h3>
+              <div class="col-md-8" v-if="!!teamAttendance">
+                <ul class="list-group mb-3">
+                  <li class="list-group-item">
+                    <strong>In </strong>
+                    <span>({{playersIn.length}})</span>
                   </li>
+                  <li class="list-group-item" v-for="player in playersIn">{{player.user.firstName}} {{player.user.lastName}}</li>
                 </ul>
-                <ul class="list-group">
-                  <li class="list-group-item list-group-item-danger">
-                    <h3 class="h5 mb-0">Out</h3>
+                <ul class="list-group mb-3">
+                  <li class="list-group-item">
+                    <strong>Out</strong>
+                    <span>({{playersOut.length}})</span>
                   </li>
+                  <li class="list-group-item" v-for="player in playersOut">{{player.user.firstName}} {{player.user.lastName}}</li>
                 </ul>
-                <ul class="list-group">
-                  <li class="list-group-item list-group-item-primary">
-                    <h3 class="h5 mb-0">Maybe</h3>
+                <ul class="list-group mb-3">
+                  <li class="list-group-item">
+                    <strong>Maybe</strong>
+                    <span>({{playersMaybe.length}})</span>
                   </li>
+                  <li class="list-group-item" v-for="player in playersMaybe">{{player.user.firstName}} {{player.user.lastName}}</li>
                 </ul>
               </div>
             </div>
@@ -61,12 +67,16 @@
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import AttendanceButtons from './events/AttendanceButtons'
 
 export default {
   name: 'Event',
-  props: ['id'],
+  props: {
+    id: {
+      required: true
+    }
+  },
   components: {
     AttendanceButtons
   },
@@ -75,7 +85,8 @@ export default {
       'user',
       'event',
       'attendancesByEventId',
-      'team'
+      'team',
+      'teamAttendanceByEvent'
     ]),
     attendanceStatus () {
       const attendance = this.attendancesByEventId[this.id]
@@ -83,12 +94,37 @@ export default {
     },
     hasSufficientData () {
       return !!this.event
+    },
+    teamAttendance () {
+      return this.teamAttendanceByEvent ? this.teamAttendanceByEvent[this.id] : []
+    },
+    playersIn () {
+      return this.teamAttendance.filter(attendance => {
+        return attendance.status === 'Yes'
+      })
+    },
+    playersOut () {
+      return this.teamAttendance.filter(attendance => {
+        return attendance.status === 'No'
+      })
+    },
+    playersMaybe () {
+      return this.teamAttendance.filter(attendance => {
+        return attendance.status === 'Maybe'
+      })
     }
   },
+  methods: {
+    ...mapActions([
+      'getEvent',
+      'getAttendancesByEventId',
+      'getTeamAttendanceByEvent'
+    ])
+  },
   mounted () {
-    this.$store.dispatch('getTeam', this.id)
-    this.$store.dispatch('getEvent', this.id)
-    this.$store.dispatch('getAttendancesByEventId', {eventId: this.id, userId: this.user.id})
+    this.getEvent(this.id)
+    this.getTeamAttendanceByEvent({eventId: this.id})
+    this.getAttendancesByEventId({eventId: this.id, userId: this.user.id})
   }
 }
 </script>
