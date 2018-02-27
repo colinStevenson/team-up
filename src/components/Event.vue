@@ -41,7 +41,7 @@
                 <ul class="list-group mb-3">
                   <li class="list-group-item">
                     <strong>In </strong>
-                    <span>({{playersIn.length}})</span>
+                    <span>({{womenIn.length}}F, {{menIn.length}}M, {{playersIn.length}} total)</span>
                   </li>
                   <li class="list-group-item" v-for="player in playersIn">{{player.user.firstName}} {{player.user.lastName}}</li>
                 </ul>
@@ -101,6 +101,16 @@ export default {
     playersIn () {
       return this.teamAttendance.filter(attendance => {
         return attendance.status === 'Yes'
+      })
+    },
+    menIn () {
+      return this.playersIn.filter(attendance => {
+        return attendance.user.gender === 'Male'
+      })
+    },
+    womenIn () {
+      return this.playersIn.filter(attendance => {
+        return attendance.user.gender === 'Female'
       })
     },
     playersOut () {
