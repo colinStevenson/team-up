@@ -60,7 +60,7 @@ class AuthService {
     this.userProfile = null
     this.authNotifier.emit('authChange', false)
     // navigate to the home route
-    router.replace('home')
+    router.replace({name: 'Home'})
   }
 
   isAuthenticated () {
