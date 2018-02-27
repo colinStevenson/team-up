@@ -40,7 +40,8 @@ const GET_ATTENDANCES_BY_EVENT = gql`
         id,
         email
         firstName,
-        lastName
+        lastName,
+        gender
       }
     }
   }
