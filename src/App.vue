@@ -30,6 +30,7 @@ const { authenticated, authNotifier } = auth
 export default {
   name: 'app',
   created () {
+    this.handleRedirect()
     this.$store.dispatch('getUser')
     auth.authNotifier.on('authChange', (authStatus) => {
       this.$store.dispatch('getUser')
@@ -53,6 +54,14 @@ export default {
     return {
       auth,
       authenticated
+    }
+  },
+  methods: {
+    handleRedirect () {
+      console.log(this.$route)
+      if (this.$route.query && this.$route.query.redirect) {
+        this.$router.replace(this.$route.query.redirect)
+      }
     }
   }
 }
