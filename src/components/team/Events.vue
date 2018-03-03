@@ -1,6 +1,6 @@
 <template>
   <div>
-    <section class="card mb-4">
+    <section class="card mb-3">
       <div class="card-header">
         <h3 class="card-title">Upcoming Games</h3>
       </div>
@@ -30,7 +30,7 @@
         </div>
       </div>
     </section>
-    <section class="card">
+    <section class="card mb-3" v-if="showPastEvents">
       <div class="card-header">
         <h3 class="card-title">Past Games</h3>
       </div>
@@ -45,6 +45,9 @@
         </li>
       </ul>
     </section>
+    <button class="btn btn-link pl-0" @click="showPastEvents = !showPastEvents">
+      {{showPastEvents ? 'Hide past games' : 'Show past games'}}
+    </button>
   </div>
 </template>
 <script>
@@ -86,7 +89,8 @@ export default {
     return {
       isEditing: false,
       eventName: null,
-      eventDate: null
+      eventDate: null,
+      showPastEvents: false
     }
   },
   methods: {

@@ -7,10 +7,10 @@
     </div>
     <div class="container">
       <div class="row">
-        <div class="col-sm-8">
+        <div class="col-md-8">
           <events :team-id="id"></events>
         </div>
-        <div class="col-sm-4">
+        <div class="col-md-4">
           <members :team-id="id"></members>
         </div>
       </div>
