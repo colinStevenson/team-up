@@ -1,15 +1,22 @@
 <template>
   <div id="app">
     <site-header :authenticated="authenticated"></site-header>
-    <main v-if="loadingUserData">
+    <main class="main" v-if="loadingUserData">
       <site-loader></site-loader>
     </main>
-    <main v-else>
+    <main class="main" v-else>
       <router-view
         :auth="auth"
         :authenticated="authenticated">
       </router-view>
     </main>
+    <footer class="bg-light mt-3">
+      <div class="container">
+        <div class="py-3">
+          * Actual app name may vary
+        </div>
+      </div>
+    </footer>
   </div>
 </template>
 
@@ -23,6 +30,7 @@ const { authenticated, authNotifier } = auth
 export default {
   name: 'app',
   created () {
+    this.handleRedirect()
     this.$store.dispatch('getUser')
     auth.authNotifier.on('authChange', (authStatus) => {
       this.$store.dispatch('getUser')
@@ -46,6 +54,14 @@ export default {
     return {
       auth,
       authenticated
+    }
+  },
+  methods: {
+    handleRedirect () {
+      console.log(this.$route)
+      if (this.$route.query && this.$route.query.redirect) {
+        this.$router.replace(this.$route.query.redirect)
+      }
     }
   }
 }
