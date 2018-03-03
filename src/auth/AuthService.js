@@ -1,6 +1,7 @@
 import auth0 from 'auth0-js'
 import EventEmitter from 'EventEmitter'
 import router from './../router'
+import jwtDecode from 'jwt-decode'
 
 class AuthService {
   authenticated = this.isAuthenticated()
@@ -12,7 +13,6 @@ class AuthService {
     this.logout = this.logout.bind(this)
     this.isAuthenticated = this.isAuthenticated.bind(this)
     this.isRegistered = null
-    window.auth0 = auth0
     window.auth = this
   }
 
@@ -22,7 +22,7 @@ class AuthService {
     redirectUri: process.env.AUTH_0_REDIRECT_URL,
     // audience: 'https://team-up.auth0.com/userinfo',
     responseType: 'token id_token',
-    scope: 'openid'
+    scope: 'openid email'
   })
 
   login () {
@@ -50,6 +50,10 @@ class AuthService {
     localStorage.setItem('id_token', authResult.idToken)
     localStorage.setItem('expires_at', expiresAt)
     this.authNotifier.emit('authChange', { authenticated: true })
+  }
+
+  getProfile () {
+    return jwtDecode(this.getIdToken())
   }
 
   logout () {

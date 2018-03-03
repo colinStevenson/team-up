@@ -10,8 +10,8 @@
         <div class="card-body">
           <div class="form-group">
             <label for="register-email">Email address</label>
-            <input v-model="email" type="email" class="form-control" id="register-email" aria-describedby="emailHelp" placeholder="Enter email">
-            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+            <div v-if="authEmail">{{authEmail}}</div>
+            <input v-else v-model="email" type="email" class="form-control" id="register-email" aria-describedby="emailHelp" placeholder="Enter email">
           </div>
           <div class="form-group">
             <label for="regster-first-name">First Name</label>
@@ -35,11 +35,11 @@
                 Male
               </label>
             </div>
-            <small class="form-text text-muted">Why do we need to know about your gender?</small>
+            <small class="form-text text-muted">If you are on a coed team, we will show attendance by gender.</small>
           </div>
         </div>
         <div class="card-body">
-          <button @click="handleSubmit" class="btn btn-success" type="button">Sign up</button>
+          <button @click="handleSubmit" class="btn btn-primary" type="button">Sign up</button>
         </div>
       </section>
     </div>
@@ -47,9 +47,16 @@
 </template>
 <script>
 import { mapActions } from 'vuex'
+import auth from '../auth/AuthService.js'
 export default {
   name: 'Register',
   props: ['auth'],
+  computed: {
+    authEmail () {
+      const profile = auth.getProfile()
+      return profile ? profile.email : this.email
+    }
+  },
   data () {
     return {
       email: null,
@@ -65,7 +72,7 @@ export default {
     handleSubmit () {
       this.createUser({
         idToken: this.auth.getIdToken(),
-        email: this.email,
+        email: this.authEmail,
         firstName: this.firstName,
         lastName: this.lastName,
         gender: this.gender,
