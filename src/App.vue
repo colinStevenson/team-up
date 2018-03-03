@@ -1,15 +1,22 @@
 <template>
   <div id="app">
     <site-header :authenticated="authenticated"></site-header>
-    <main v-if="loadingUserData">
+    <main class="main" v-if="loadingUserData">
       <site-loader></site-loader>
     </main>
-    <main v-else>
+    <main class="main" v-else>
       <router-view
         :auth="auth"
         :authenticated="authenticated">
       </router-view>
     </main>
+    <footer class="bg-light mt-3">
+      <div class="container">
+        <div class="py-3">
+          * Actual app name may vary
+        </div>
+      </div>
+    </footer>
   </div>
 </template>
 
