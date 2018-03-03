@@ -15,14 +15,14 @@
         <div v-else>
           <button
             type="button"
-            class="btn btn-primary btn-sm"
+            class="btn btn-info btn-sm"
             v-if="!authenticated"
             @click="login()">
               Log In
           </button>
           <button
             type="button"
-            class="btn btn-info btn-sm ml-2"
+            class="btn btn-primary btn-sm ml-2"
             v-if="!authenticated"
             @click="register()">
               Sign up

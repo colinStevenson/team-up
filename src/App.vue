@@ -58,7 +58,6 @@ export default {
   },
   methods: {
     handleRedirect () {
-      console.log(this.$route)
       if (this.$route.query && this.$route.query.redirect) {
         this.$router.replace(this.$route.query.redirect)
       }
