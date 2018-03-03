@@ -1,33 +1,6 @@
 <template>
   <div id="app">
-    <nav class="navbar navbar-light navbar-primary bg-info">
-      <div class="container">
-        <router-link :to="'/'" class="navbar-brand">TeamApp*</router-link>  
-        <div class="d-inline-flex">
-          <button
-            type="button"
-            class="btn btn-primary btn-sm"
-            v-if="!authenticated"
-            @click="login()">
-              Log In
-          </button>
-          <button
-            type="button"
-            class="btn btn-success btn-sm ml-2"
-            v-if="!authenticated"
-            @click="register()">
-              Sign up
-          </button>
-          <button
-            type="button"
-            class="btn btn-danger btn-sm"
-            v-if="authenticated"
-            @click="logout()">
-              Log Out
-          </button>
-        </div>
-      </div>
-    </nav>
+    <site-header :authenticated="authenticated"></site-header>
     <main v-if="loadingUserData">
       <site-loader></site-loader>
     </main>
@@ -42,10 +15,10 @@
 
 <script>
 import auth from './auth/AuthService'
-import SiteLoader from './components/shared/SiteLoader.vue'
+import SiteLoader from './components/shared/SiteLoader'
+import SiteHeader from './components/SiteHeader'
 import { mapGetters } from 'vuex'
-
-const { login, logout, authenticated, authNotifier } = auth
+const { authenticated, authNotifier } = auth
 
 export default {
   name: 'app',
@@ -56,14 +29,15 @@ export default {
     })
   },
   components: {
-    SiteLoader
+    SiteLoader,
+    SiteHeader
   },
   computed: {
-    ...mapGetters({
-      user: 'user',
-      isRegisteredUser: 'isRegisteredUser',
-      loadingUserData: 'loadingUserData'
-    })
+    ...mapGetters([
+      'user',
+      'isRegisteredUser',
+      'loadingUserData'
+    ])
   },
   data () {
     authNotifier.on('authChange', authState => {
@@ -72,13 +46,6 @@ export default {
     return {
       auth,
       authenticated
-    }
-  },
-  methods: {
-    login,
-    logout,
-    register () {
-      this.$router.push('register')
     }
   }
 }
