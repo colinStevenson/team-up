@@ -16,12 +16,13 @@ const getters = {
 }
 
 const actions = {
-  getTeams (context, userId) {
+  getTeams (context, {userId, forceNetwork}) {
     apolloClient.query({
       query: Queries.ALL_TEAMS_QUERY,
       variables: {
         userId
-      }
+      },
+      fetchPolicy: forceNetwork ? 'network-only' : 'cache-first'
     }).then((result) => {
       context.commit('SET_TEAMS', result.data.allTeams)
     })

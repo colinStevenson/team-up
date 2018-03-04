@@ -6,64 +6,88 @@
       </div>
     </div>
      <div class="container">
-        <section class="card">
+        <section class="card" :class="{'is-loading': isLoadingTeams}" v-if="teams && teams.length">
           <ul class="list-group list-group-flush">
               <li v-for="team in teams" class="list-group-item">
                 <router-link :to="`/team/${team.id}`">{{team.name}}</router-link>
               </li>
           </ul>
         </section>
-      </div>
-      <div class="col-sm">
-        <section class="card" v-if="invitations && invitations.length ">
+        <section class="card" :class="{'is-loading': isLoadingTeams}" v-if="invitations && invitations.length ">
           <div class="card-body">
             <h2 class="card-title">Invitations</h2>
           </div>
           <ul class="list-group list-group-flush">
               <li 
                 v-for="invitation in invitations" 
-                class="list-group-item d-flex justify-content-between invitation" 
-                :class="acceptedInvitations.includes(invitation.id) ? 'accepted' : ''">
+                class="list-group-item d-flex justify-content-between">
                 <span>{{invitation.team.name}}</span>
                 <button class="btn btn-primary btn-sm" @click="joinTeam(invitation.team.id, invitation.id)">Join</button>
               </li>
           </ul>
         </section>
-    </div>
+        <section class="jumbotron" v-if="!hasTeamsOrInvites">
+          <p>Please contact your team manager to obtain an invite to your teams page. Be sure they use the email you have created an account with to send the invite.</p>
+        </section>
+      </div>
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import RequiresRegistrationMixin from './mixins/RequiresRegistrationMixin'
 
 export default {
   name: 'Teams',
   computed: {
-    ...mapGetters({
-      user: 'user',
-      teams: 'teams',
-      invitations: 'invitations',
-      acceptedInvitations: 'acceptedInvitations'
-    }),
+    ...mapGetters([
+      'user',
+      'teams',
+      'invitations',
+      'acceptedInvitations'
+    ]),
     hasTeamsOrInvites () {
-      return this.teams && this.invitations
+      return (this.teams && this.teams.length) || (this.invitations && this.invitations.length)
+    }
+  },
+  data () {
+    return {
+      isLoadingTeams: false,
+      isLoadingInvitations: false
     }
   },
   mounted () {
     if (this.user) {
       this.requestTeams()
+      this.requestInvitations()
     }
   },
   methods: {
-    requestTeams () {
-      this.$store.dispatch('getTeams', this.user.id)
-      this.$store.dispatch('getInvitations', this.user.email)
+    ...mapActions([
+      'getTeams',
+      'getInvitations',
+      'addUserToTeam'
+    ]),
+    requestInvitations (forceNetwork) {
+      this.isLoadingInvitations = true
+      this.getInvitations({email: this.user.email, forceNetwork}).then(() => {
+        this.isLoadingInvitations = false
+      })
+    },
+    requestTeams (forceNetwork) {
+      this.isLoadingTeams = true
+      this.getTeams({userId: this.user.id, forceNetwork}).then(() => {
+        this.isLoadingTeams = false
+      })
     },
     joinTeam (teamId, invitationId) {
-      this.$store.dispatch('addUserToTeam', {
+      this.isLoadingInvitations = true
+      this.addUserToTeam({
         invitationId,
         teamId,
         userId: this.user.id
+      }).then(() => {
+        this.requestTeams(true)
+        this.requestInvitations(true)
       })
     },
     checkRedirect () {
@@ -83,7 +107,7 @@ export default {
   watch: {
     user () {
       if (this.user) {
-        this.requestTeams()
+        this.requestTeams(false)
       }
     },
     invitations () {
@@ -95,12 +119,3 @@ export default {
   }
 }
 </script>
-<style lang="scss">
-  .invitation{
-    transition: 0.3s opacity ease-out;
-
-    &.accepted{
-      opacity: 0;
-    }
-  }
-</style>

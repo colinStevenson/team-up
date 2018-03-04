@@ -1,5 +1,5 @@
 <template>
-  <div class="attendance-control">
+  <div class="attendance-control" :class="{'is-loading': isLoading}">
     <input 
       class="yes"
       :disabled="isLoading"
@@ -46,8 +46,7 @@ export default {
   computed: {
     ...mapGetters([
       'user',
-      'attendancesByEventId',
-      'loadingAttendancesByEventId'
+      'attendancesByEventId'
     ]),
     attendance () {
       let val = null
@@ -58,30 +57,45 @@ export default {
     },
     inputName () {
       return `${this.eventId}-control`
-    },
-    isLoading () {
-      return this.loadingAttendancesByEventId[this.eventId] === true
     }
   },
   data () {
     return {
       status: null,
-      noWatchStatus: false
+      noWatchStatus: false,
+      isLoading: false
     }
   },
   methods: {
     ...mapActions([
       'recordAttendance',
       'updateAttendance',
-      'getAttendancesByEventId'
+      'getAttendancesByEventId',
+      'getTeamAttendanceByEvent'
     ]),
+    reloadAttedendance () {
+      this.getAttendancesByEventId({
+        eventId: this.eventId,
+        userId: this.user.id,
+        forceNetwork: true
+      }).then(() => {
+        this.isLoading = false
+      })
+      this.getTeamAttendanceByEvent({
+        eventId: this.eventId,
+        forceNetwork: true
+      })
+    },
     saveStatus (status) {
+      this.isLoading = true
       if (this.attendance && this.attendance.id) {
         this.updateAttendance({
           attendanceId: this.attendance.id,
           eventId: this.eventId,
           userId: this.user.id,
           status: status
+        }).then(() => {
+          this.reloadAttedendance()
         })
       } else {
         this.recordAttendance({
@@ -89,6 +103,8 @@ export default {
           userId: this.user.id,
           teamId: this.teamId,
           status: status
+        }).then(() => {
+          this.reloadAttedendance()
         })
       }
     }

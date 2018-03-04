@@ -4,18 +4,16 @@ import apolloClient from '../../apollo'
 const state = {
   invitations: null,
   acceptedInvitations: [],
-  unacceptedInvitations: null,
-  loadingUnacceptedInvitations: null
+  unacceptedInvitations: null
 }
 const getters = {
   invitations: state => state.invitations,
   acceptedInvitations: state => state.acceptedInvitations,
-  unacceptedInvitations: state => state.unacceptedInvitations,
-  loadingUnacceptedInvitations: state => state.loadingUnacceptedInvitations
+  unacceptedInvitations: state => state.unacceptedInvitations
 }
 const actions = {
   sendInvitation (context, {userId, email, teamId}) {
-    apolloClient.mutate({
+    return apolloClient.mutate({
       mutation: Queries.CREATE_INVITATION,
       variables: {
         email,
@@ -29,19 +27,19 @@ const actions = {
       })
     })
   },
-  getInvitations (context, email) {
-    apolloClient.query({
+  getInvitations (context, {email, forceNetwork}) {
+    return apolloClient.query({
       query: Queries.GET_TEAM_INVITATIONS,
       variables: {
         email
-      }
+      },
+      fetchPolicy: forceNetwork ? 'network-only' : 'cache-first'
     }).then((result) => {
       context.commit('SET_TEAM_INVITATIONS', result.data.allInvitations)
     })
   },
   getUnacceptedInvitations (context, {teamId, forceNetwork}) {
-    context.commit('SET_LOADING_UNACCEPTED_INVITATIONS', true)
-    apolloClient.query({
+    return apolloClient.query({
       query: Queries.GET_UNACCEPTED_INVITATIONS,
       variables: {
         teamId
@@ -49,7 +47,6 @@ const actions = {
       fetchPolicy: forceNetwork ? 'network-only' : 'cache-first'
     }).then(result => {
       context.commit('SET_UNACCEPTED_INVITATIONS', result.data.allInvitations)
-      context.commit('SET_LOADING_UNACCEPTED_INVITATIONS', false)
     })
   }
 }
@@ -58,13 +55,12 @@ const mutations = {
     state.invitations = invitations
   },
   SET_INVITATION_ACCEPTED (state, invitationId) {
-    state.acceptedInvitations.push(invitationId)
+    const invitations = state.acceptedInvitations.slice(0)
+    invitations.push(invitationId)
+    state.acceptedInvitations = invitations
   },
   SET_UNACCEPTED_INVITATIONS (state, invitations) {
     state.unacceptedInvitations = invitations
-  },
-  SET_LOADING_UNACCEPTED_INVITATIONS (state, loading) {
-    state.loadingUnacceptedInvitations = loading
   }
 }
 
