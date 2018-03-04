@@ -1,6 +1,6 @@
 <template>
   <div>
-    <section class="card mb-3">
+    <section class="card mb-3" :class="{'is-loading': isLoadingEvents}">
       <div class="card-header">
         <h3 class="card-title">Upcoming Games</h3>
       </div>
@@ -22,6 +22,10 @@
             <input type="text" class="form-control" id="event-name" placeholder="Enter event name" v-model="eventName">
           </div>
           <div class="form-group">
+            <label for="event-location">Location</label>
+            <input type="text" class="form-control" id="event-location" placeholder="Enter location" v-model="eventLocation">
+          </div>
+          <div class="form-group">
             <label for="event-date">Date/ Time</label>
             <input class="form-control" type="datetime-local" id="event-date" v-model="eventDate">
           </div>
@@ -30,7 +34,7 @@
         </div>
       </div>
     </section>
-    <section class="card mb-3" v-if="showPastEvents">
+    <section class="card mb-3"  :class="{'is-loading': isLoadingEvents}" v-if="showPastEvents">
       <div class="card-header">
         <h3 class="card-title">Past Games</h3>
       </div>
@@ -51,7 +55,7 @@
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import AttendanceButtons from './../events/AttendanceButtons'
 import moment from 'moment'
 
@@ -90,23 +94,38 @@ export default {
       isEditing: false,
       eventName: null,
       eventDate: null,
-      showPastEvents: false
+      eventLocation: null,
+      showPastEvents: false,
+      isLoadingEvents: false
     }
   },
   methods: {
+    ...mapActions([
+      'createTeamEvent',
+      'getTeamEvents'
+    ]),
     toggleEditing () {
       this.isEditing = !this.isEditing
     },
     saveEvent () {
-      this.$store.dispatch('createTeamEvent', {
+      this.createTeamEvent({
         teamId: this.teamId,
         name: this.eventName,
+        location: this.eventLocation,
         eventDate: this.eventDate
+      }).then(() => {
+        this.requestEvents(true)
+      })
+    },
+    requestEvents (forceNetwork) {
+      this.isLoadingEvents = true
+      this.getTeamEvents({teamId: this.teamId, forceNetwork}).then(() => {
+        this.isLoadingEvents = false
       })
     }
   },
   mounted () {
-    this.$store.dispatch('getTeamEvents', this.teamId)
+    this.requestEvents()
   },
   props: ['teamId']
 }

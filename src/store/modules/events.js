@@ -10,33 +10,32 @@ const getters = {
   event: state => state.event
 }
 const actions = {
-  createTeamEvent (context, {name, eventDate, teamId}) {
-    apolloClient.mutate({
+  createTeamEvent (context, {name, location, eventDate, teamId}) {
+    return apolloClient.mutate({
       mutation: Queries.CREATE_EVENT,
       variables: {
         name,
         eventDate,
+        location,
         teamId
       }
-    }).then(result => {
-      // Loading state
-      console.log(result)
     }).catch(error => {
       console.error(error)
     })
   },
-  getTeamEvents (context, teamId) {
-    apolloClient.query({
+  getTeamEvents (context, {teamId, forceNetwork}) {
+    return apolloClient.query({
       query: Queries.EVENTS_BY_TEAM,
       variables: {
         teamId
-      }
+      },
+      fetchPolicy: forceNetwork ? 'network-only' : 'cache-first'
     }).then((result) => {
       context.commit('SET_TEAM_EVENTS', result.data.allEvents)
     })
   },
   getEvent (context, eventId) {
-    apolloClient.query({
+    return apolloClient.query({
       query: Queries.EVENT_BY_ID,
       variables: {
         id: eventId
