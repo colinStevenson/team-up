@@ -10,13 +10,6 @@
         :authenticated="authenticated">
       </router-view>
     </main>
-    <footer class="bg-light mt-3">
-      <div class="container">
-        <div class="py-3">
-          * Actual app name may vary
-        </div>
-      </div>
-    </footer>
   </div>
 </template>
 

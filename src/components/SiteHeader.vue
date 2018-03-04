@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar navbar-light navbar-primary bg-info">
       <div class="container">
-        <router-link :to="'/'" class="navbar-brand">TeamApp*</router-link>  
+        <router-link :to="'/'" class="navbar-brand">{{appName}}</router-link>  
         <div v-if="authenticated && user">
           <span class="p-2">{{user.firstName}} {{user.lastName}}</span>
           <button
@@ -41,6 +41,7 @@
 <script>
 import auth from '../auth/AuthService'
 import { mapGetters } from 'vuex'
+import constants from '../shared/constants'
 const { login, logout } = auth
 export default {
   props: ['authenticated'],
@@ -48,6 +49,11 @@ export default {
     ...mapGetters([
       'user'
     ])
+  },
+  data () {
+    return {
+      appName: constants.APP_NAME
+    }
   },
   methods: {
     login,

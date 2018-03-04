@@ -2,7 +2,7 @@
   <div>
     <div class="page-header mb-0">
       <div class="container">
-        <h1>Welcome to TeamApp*</h1>
+        <h1>Welcome to {{appName}}</h1>
       </div>
     </div>
     <div class="jumbotron jumbotron-fluid">
@@ -22,9 +22,14 @@
 </template>
 
 <script>
-
+import constants from '../shared/constants'
 export default {
   name: 'Home',
+  data () {
+    return {
+      appName: constants.APP_NAME
+    }
+  },
   methods: {
     register () {
       this.$router.push('register')
