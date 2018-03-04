@@ -28,11 +28,12 @@ const EVENTS_BY_TEAM = gql`
   }
 `
 const CREATE_EVENT = gql`
-  mutation CreateEvent($name: String!, $eventDate: DateTime!, $teamId: ID!) {
+  mutation CreateEvent($name: String!, $eventDate: DateTime!, $teamId: ID!, $location: String!) {
     createEvent(
       name: $name,
       time: $eventDate,
-      teamId: $teamId
+      teamId: $teamId,
+      location: $location
     ) {
       id
     }
