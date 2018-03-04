@@ -32,7 +32,7 @@ const actions = {
     })
   },
   addUserToTeam (context, {invitationId, userId, teamId}) {
-    apolloClient.mutate({
+    return apolloClient.mutate({
       mutation: Queries.ADD_USER_TO_TEAM,
       variables: {
         userId,

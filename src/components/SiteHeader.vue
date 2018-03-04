@@ -27,6 +27,13 @@
             @click="register()">
               Sign up
           </button>
+          <button
+            type="button"
+            class="btn btn-danger btn-sm"
+            v-if="authenticated"
+            @click="logout()">
+              Log Out
+          </button>
         </div>
       </div>
     </nav>

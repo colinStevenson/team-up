@@ -4,6 +4,10 @@
 // Attendance Control
 $attendance-control-button-size: 54px;
 .attendance-control{
+  transition: opacity 0.2s ease-in;
+  &.is-loading{
+    opacity: 0.3;
+  }
   display: flex;
   input{
     position:absolute;
