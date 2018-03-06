@@ -1,4 +1,4 @@
-const APP_NAME = 'Manage à Team'
+const APP_NAME = 'Ménage à Team'
 
 export default {
   APP_NAME
