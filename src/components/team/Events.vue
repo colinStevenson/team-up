@@ -57,7 +57,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import AttendanceButtons from './../events/AttendanceButtons'
-import moment from 'moment'
+import Moment from 'moment'
 
 export default {
   components: {
@@ -77,14 +77,14 @@ export default {
     upcomingEvents () {
       let val = this.teamEvents || []
       return val.filter(event => {
-        const eventDate = moment(event.time)
+        const eventDate = Moment(event.time)
         return eventDate.isAfter(this.startOfDay)
       })
     },
     pastEvents () {
       let val = this.teamEvents || []
       return val.filter(event => {
-        const eventDate = moment(event.time)
+        const eventDate = Moment(event.time)
         return eventDate.isBefore(this.startOfDay)
       })
     }
@@ -112,7 +112,7 @@ export default {
         teamId: this.teamId,
         name: this.eventName,
         location: this.eventLocation,
-        eventDate: this.eventDate
+        eventDate: new Moment(this.eventDate).local().toDate()
       }).then(() => {
         this.requestEvents(true)
       })
