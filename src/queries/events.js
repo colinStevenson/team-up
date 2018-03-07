@@ -8,8 +8,14 @@ const EVENT_BY_ID = gql`
       time,
       location,
       team {
-        id, name
-      }
+        id,
+        name,
+        users {
+          id,
+          firstName,
+          lastName
+        }
+      },
     }
   }
 `

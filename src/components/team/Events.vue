@@ -66,7 +66,7 @@ export default {
   computed: {
     ...mapGetters([
       'teamEvents',
-      'isAdmin',
+      'isAdmin'
     ]),
     startOfDay () {
       const val = new Date()
