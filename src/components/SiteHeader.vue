@@ -1,7 +1,10 @@
 <template>
   <nav class="navbar navbar-light navbar-primary bg-info">
       <div class="container">
-        <router-link :to="'/'" class="navbar-brand">{{appName}}</router-link>  
+        <router-link :to="'/'" class="navbar-brand">
+          <img src="../assets/logo.svg" alt="Logo">
+          {{appName}}
+        </router-link>  
         <div v-if="authenticated && user">
           <span class="p-2">{{user.firstName}} {{user.lastName}}</span>
           <button

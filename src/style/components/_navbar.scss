@@ -7,12 +7,17 @@
   padding-bottom: $spacer;
 
   .navbar-brand{
-    background: $white;
     color: $primary;
     font-size: 1.2rem;
     font-weight: 300;
     letter-spacing: 2px;
-    padding: 4px 8px;
+    padding: 0;
     
+    > img{
+      position: relative;
+      top: -4px;
+      height: 24px;
+      width: 42px;
+    }
   }
 }
