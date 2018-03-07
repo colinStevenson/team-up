@@ -14,7 +14,7 @@
           <attendance-buttons :event-id="event.id" :team-id="teamId"></attendance-buttons>
         </li>
       </ul>
-      <div class="card-body">
+      <div class="card-body" v-if="isAdmin">
         <button class="btn btn-outline-primary card-link" @click="toggleEditing" v-if="!isEditing">Add Event</button>
         <div class="mt-3" v-if="isEditing">
           <div class="form-group">
@@ -34,7 +34,7 @@
         </div>
       </div>
     </section>
-    <section class="card mb-3"  :class="{'is-loading': isLoadingEvents}" v-if="showPastEvents">
+    <section class="card mb-3"  :class="{'is-loading': isLoadingEvents}" v-if="showPastEvents && pastEvents.length">
       <div class="card-header">
         <h3 class="card-title">Past Games</h3>
       </div>
@@ -65,7 +65,8 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'teamEvents'
+      'teamEvents',
+      'isAdmin',
     ]),
     startOfDay () {
       const val = new Date()

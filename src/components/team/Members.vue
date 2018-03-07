@@ -33,19 +33,19 @@
   </section>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'Members',
   computed: {
-    ...mapGetters({
-      teamMembers: 'teamMembers',
-      teamMembersLoading: 'teamMembersLoading',
-      isAdmin: 'isAdmin',
-      roleLoading: 'roleLoading',
-      unacceptedInvitations: 'unacceptedInvitations',
-      user: 'user'
-    }),
+    ...mapGetters([
+      'teamMembers',
+      'teamMembersLoading',
+      'isAdmin',
+      'roleLoading',
+      'unacceptedInvitations',
+      'user'
+    ]),
     isLoading () {
       return this.roleLoading || this.teamMembersLoading
     }
@@ -58,13 +58,18 @@ export default {
     }
   },
   methods: {
+    ...mapActions([
+      'sendInvitation',
+      'getUnacceptedInvitations',
+      'getTeamMembers'
+    ]),
     toggleInviting () {
       this.isInviting = !this.isInviting
       this.isValidEmail = true
     },
     sendInvitation () {
       if (this.validateInvitation()) {
-        this.$store.dispatch('sendInvitation', {
+        this.sendInvitation({
           email: this.email,
           teamId: this.teamId,
           userId: this.user.id
@@ -76,7 +81,7 @@ export default {
       }
     },
     requestUnacceptedInvitations () {
-      this.$store.dispatch('getUnacceptedInvitations', {
+      this.getUnacceptedInvitations({
         teamId: this.teamId
       })
     },
@@ -92,7 +97,7 @@ export default {
     }
   },
   mounted () {
-    this.$store.dispatch('getTeamMembers', this.teamId)
+    this.getTeamMembers(this.teamId)
     if (this.isAdmin) {
       this.requestUnacceptedInvitations()
     }
