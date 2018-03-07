@@ -12,55 +12,21 @@
           <div class="card-header d-flex justify-content-between">
             <h2 class="h3 card-title">
               {{event.name}}
-              <small></small>
             </h2>
             <attendance-buttons :event-id="id" :team-id="event.team.id"></attendance-buttons>
           </div>
           <div class="card-body">
-            <div class="row">
-              <div class="col-md-4">
-                <table class="table table-nv">
-                  <caption class="sr-only">Event details</caption>
-                  <tbody>
-                    <tr>
-                      <th scope="row">When</th>
-                      <td>{{ $moment(event.time).format('MMM Do h:mma') }}</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Where</th>
-                      <td>{{ event.location || '--' }}</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">What</th>
-                      <td>{{ event.description || '--' }}</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <div class="col-md-8" v-if="!!teamAttendance">
-                <ul class="list-group mb-3">
-                  <li class="list-group-item">
-                    <strong>In </strong>
-                    <span>({{womenIn.length}}F, {{menIn.length}}M, {{playersIn.length}} total)</span>
-                  </li>
-                  <li class="list-group-item" v-for="player in playersIn">{{player.user.firstName}} {{player.user.lastName}}</li>
-                </ul>
-                <ul class="list-group mb-3">
-                  <li class="list-group-item">
-                    <strong>Out</strong>
-                    <span>({{playersOut.length}})</span>
-                  </li>
-                  <li class="list-group-item" v-for="player in playersOut">{{player.user.firstName}} {{player.user.lastName}}</li>
-                </ul>
-                <ul class="list-group mb-3">
-                  <li class="list-group-item">
-                    <strong>Maybe</strong>
-                    <span>({{playersMaybe.length}})</span>
-                  </li>
-                  <li class="list-group-item" v-for="player in playersMaybe">{{player.user.firstName}} {{player.user.lastName}}</li>
-                </ul>
-              </div>
-            </div>
+            <h3 class="h4">
+              <strong class="pr-2">{{ $moment(event.time).format('MMM Do h:mma') }}</strong>
+              {{event.location}}
+            </h3>
+            <attendance-count v-if="teamAttendance" :men="menIn.length" :women="womenIn.length"></attendance-count>
+              <ul class="list-group mb-3" v-if="!!teamAttendance">
+                <li class="list-group-item d-flex justify-content-between" v-for="member in membersWithAttendance">
+                  <span>{{member.firstName}} {{member.lastName}}</span>
+                  <status-indicator :status="member.attendance.status"></status-indicator>
+                </li>
+              </ul>
           </div>
         </section>
     </div>
@@ -69,6 +35,8 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import AttendanceButtons from './events/AttendanceButtons'
+import StatusIndicator from './shared/StatusIndicator'
+import AttendanceCount from './shared/AttendanceCount'
 
 export default {
   name: 'Event',
@@ -78,14 +46,15 @@ export default {
     }
   },
   components: {
-    AttendanceButtons
+    AttendanceButtons,
+    AttendanceCount,
+    StatusIndicator
   },
   computed: {
     ...mapGetters([
       'user',
       'event',
       'attendancesByEventId',
-      'team',
       'teamAttendanceByEvent'
     ]),
     attendanceStatus () {
@@ -122,6 +91,22 @@ export default {
       return this.teamAttendance.filter(attendance => {
         return attendance.status === 'Maybe'
       })
+    },
+    attendancesByUserId () {
+      const value = {}
+      this.teamAttendance.forEach(attendance => {
+        const userId = attendance.user.id
+        value[userId] = attendance
+      })
+      return value
+    },
+    membersWithAttendance () {
+      const value = []
+      const members = this.event && this.event.team && this.event.team.users ? this.event.team.users : []
+      members.forEach(member => {
+        value.push(Object.assign({}, member, {attendance: this.attendancesByUserId[member.id] || {}}))
+      })
+      return value
     }
   },
   methods: {
