@@ -48,7 +48,6 @@ const actions = {
         context.commit('SET_INVITATION_ACCEPTED', invitationId)
       })
     }).catch((error) => {
-      // Error
       console.error(error)
     })
   },
