@@ -6,7 +6,7 @@
           {{appName}}
         </router-link>  
         <div v-if="authenticated && user">
-          <span class="p-2">{{user.firstName}} {{user.lastName}}</span>
+          <avatar :user="user" class="mr-2"></avatar>
           <button
             type="button"
             class="btn btn-danger btn-sm"
@@ -45,9 +45,13 @@
 import auth from '../auth/AuthService'
 import { mapGetters } from 'vuex'
 import constants from '../shared/constants'
+import Avatar from './shared/Avatar'
 const { login, logout } = auth
 export default {
   props: ['authenticated'],
+  components: {
+    Avatar
+  },
   computed: {
     ...mapGetters([
       'user'
