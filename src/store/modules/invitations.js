@@ -20,11 +20,6 @@ const actions = {
         userId,
         teamId
       }
-    }).then(result => {
-      context.dispatch('getUnacceptedInvitations', {
-        teamId,
-        forceNetwork: true
-      })
     })
   },
   getInvitations (context, {email, forceNetwork}) {

@@ -1,5 +1,5 @@
 <template>
-  <section class="card" :class="isLoading ? 'loading' : ''">
+  <section class="card" :class="isLoading ? 'is-loading' : ''">
     <div class="card-header">
       <h3 class="card-title">Members</h3>
     </div>
@@ -22,7 +22,7 @@
           <small v-if="!isValidEmail" class="invalid-feedback">Invitation is pending or the email is not valid.</small>
         </div>
         <div class="form-group">
-          <button class="btn btn-primary mr-sm-1" type="button" @click="sendInvitation">Send</button>
+          <button class="btn btn-primary mr-sm-1" type="button" @click="handleInvitationSend">Send</button>
           <button class="btn btn-danger" type="button" @click="toggleInviting">Cancel</button>
         </div>
       </div>
@@ -40,21 +40,22 @@ export default {
   computed: {
     ...mapGetters([
       'teamMembers',
-      'teamMembersLoading',
       'isAdmin',
       'roleLoading',
       'unacceptedInvitations',
       'user'
     ]),
     isLoading () {
-      return this.roleLoading || this.teamMembersLoading
+      return this.roleLoading || this.isLoadingMembers || this.isLoadingInvitations
     }
   },
   data () {
     return {
       isInviting: false,
       email: '',
-      isValidEmail: true
+      isValidEmail: true,
+      isLoadingInvitations: false,
+      isLoadingMembers: false
     }
   },
   methods: {
@@ -67,12 +68,14 @@ export default {
       this.isInviting = !this.isInviting
       this.isValidEmail = true
     },
-    sendInvitation () {
+    handleInvitationSend () {
       if (this.validateInvitation()) {
         this.sendInvitation({
           email: this.email,
           teamId: this.teamId,
           userId: this.user.id
+        }).then(() => {
+          this.requestUnacceptedInvitations(true)
         })
         this.email = ''
       } else {
@@ -80,9 +83,19 @@ export default {
         console.error('invitation already exists')
       }
     },
-    requestUnacceptedInvitations () {
+    requestMembers () {
+      this.isLoadingMembers = true
+      this.getTeamMembers(this.teamId).then(() => {
+        this.isLoadingMembers = false
+      })
+    },
+    requestUnacceptedInvitations (forceNetwork) {
+      this.isLoadingInvitations = true
       this.getUnacceptedInvitations({
-        teamId: this.teamId
+        teamId: this.teamId,
+        forceNetwork
+      }).then(() => {
+        this.isLoadingInvitations = false
       })
     },
     validateInvitation () {
@@ -97,7 +110,7 @@ export default {
     }
   },
   mounted () {
-    this.getTeamMembers(this.teamId)
+    this.requestMembers()
     if (this.isAdmin) {
       this.requestUnacceptedInvitations()
     }
