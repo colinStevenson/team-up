@@ -13,7 +13,7 @@ import constants from '../shared/constants'
 
 function requireAuth (to, from, next) {
   if (!auth.isAuthenticated()) {
-    // next(false)
+    next(false)
   } else {
     next()
   }
