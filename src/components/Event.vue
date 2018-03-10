@@ -10,8 +10,7 @@
     <div class="container">
         <div class="mb-3">
           <router-link :to="`/team/${event.team.id}`">
-            <i class="material-icons">&#xE5C4;</i>
-            Back to Games
+            <i class="material-icons md-16">&#xE5C4;</i>Back to Games
           </router-link>
         </div>
         <section class="card">
