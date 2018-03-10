@@ -6,13 +6,15 @@
           {{appName}}
         </router-link>  
         <div v-if="authenticated && user">
-          <avatar :user="user" class="mr-2"></avatar>
+          <avatar :user="user" class="mr-1"></avatar>
           <button
             type="button"
-            class="btn btn-danger btn-sm"
+            class="btn btn-link btn-sm text-danger"
+            title="Logout"
             v-if="authenticated"
             @click="logout()">
-              Log Out
+              <span class="sr-only">Logout</span>
+              <i class="material-icons">&#xE898;</i>
           </button>
         </div>
         <div v-else>
