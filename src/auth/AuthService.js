@@ -36,7 +36,6 @@ class AuthService {
         router.replace('teams')
       } else if (err) {
         router.replace('home')
-        console.log(err)
       }
     })
   }

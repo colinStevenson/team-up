@@ -9,13 +9,11 @@ import AuthCallback from '@/components/AuthCallback'
 import Team from '@/components/Team'
 import Teams from '@/components/Teams'
 import Register from '@/components/Register'
+import constants from '../shared/constants'
 
 function requireAuth (to, from, next) {
   if (!auth.isAuthenticated()) {
-    next({
-      path: '/',
-      query: { redirect: to.fullPath }
-    })
+    // next(false)
   } else {
     next()
   }
@@ -40,21 +38,27 @@ const router = new Router({
       path: '/teams',
       name: 'Teams',
       component: Teams,
-      beforeEnter: requireAuth
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/team/:id',
       name: 'Team',
       component: Team,
       props: true,
-      beforeEnter: requireAuth
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/event/:id',
       name: 'Event',
       component: Event,
       props: true,
-      beforeEnter: requireAuth
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/register',
@@ -67,6 +71,16 @@ const router = new Router({
       component: AuthCallback
     }
   ]
+})
+
+router.beforeResolve((to, from, next) => {
+  if (to.meta.requiresAuth) {
+    requireAuth(to, from, next)
+  }
+  const name = to.name || ''
+  const title = `${constants.APP_NAME} - ${name}`
+  window.document.title = title
+  next()
 })
 
 export default router
