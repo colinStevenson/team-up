@@ -23,8 +23,14 @@
 
 <script>
 import constants from '../shared/constants'
+
 export default {
   name: 'Home',
+  created () {
+    if (this.authenticated) {
+      this.$router.replace('/teams')
+    }
+  },
   data () {
     return {
       appName: constants.APP_NAME
@@ -34,7 +40,10 @@ export default {
     register () {
       this.$router.push('register')
     }
-  }
+  },
+  props: [
+    'authenticated'
+  ]
 }
 </script>
 
