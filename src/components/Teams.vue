@@ -26,7 +26,7 @@
               </li>
           </ul>
         </section>
-        <section class="jumbotron" v-if="!hasTeamsOrInvites">
+        <section class="jumbotron" v-if="!isLoadingTeams && !hasTeamsOrInvites">
           <p>Please contact your team manager to obtain an invite to your teams page. Be sure they use the email you have created an account with to send the invite.</p>
         </section>
       </div>
