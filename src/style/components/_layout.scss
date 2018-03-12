@@ -1,5 +1,10 @@
 // General Page Layout
 //
+@include media-breakpoint-down(xs) {
+  html{
+    font-size: 14px;
+  }
+}
 .main{
   min-height: 90vh;
 }

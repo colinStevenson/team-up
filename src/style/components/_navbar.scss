@@ -7,10 +7,14 @@
   padding-bottom: $spacer;
 
   .navbar-brand{
+
+    &:hover{
+      color: $primary;
+    }
     color: $primary;
-    font-size: 1.2rem;
+    font-size: 1.6rem;
     font-weight: 300;
-    letter-spacing: 2px;
+    // letter-spacing: 2px;
     padding: 0;
     
     > svg{

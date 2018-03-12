@@ -19,3 +19,8 @@
     }
   }
 }
+@include media-breakpoint-down(xs) {
+  .page-header{
+    padding: $spacer 0;
+  }
+}
