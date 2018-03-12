@@ -2,7 +2,7 @@
   <nav class="navbar navbar-light navbar-primary bg-info">
       <div class="container">
         <router-link :to="'/'" class="navbar-brand">
-          <img src="../assets/logo.svg" alt="Logo">
+          <logo></logo>
           {{appName}}
         </router-link>  
         <div v-if="authenticated && user">
@@ -34,10 +34,12 @@
           </button>
           <button
             type="button"
-            class="btn btn-danger btn-sm"
+            class="btn btn-link btn-sm text-danger"
+            title="Logout"
             v-if="authenticated"
             @click="logout()">
-              Log Out
+              <span class="sr-only">Logout</span>
+              <i class="material-icons">&#xE898;</i>
           </button>
         </div>
       </div>
@@ -48,11 +50,13 @@ import auth from '../auth/AuthService'
 import { mapGetters } from 'vuex'
 import constants from '../shared/constants'
 import Avatar from './shared/Avatar'
+import Logo from '../assets/logo.svg'
 const { login, logout } = auth
 export default {
   props: ['authenticated'],
   components: {
-    Avatar
+    Avatar,
+    Logo
   },
   computed: {
     ...mapGetters([
