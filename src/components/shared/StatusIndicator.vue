@@ -1,5 +1,10 @@
 <template>
-  <span v-if="status" class="badge" :class="statusClass">{{status}}</span>
+  <span v-if="status" class="badge status-indicator" :class="statusClass">
+    <span class="sr-only">{{status}}</span>
+    <i class="material-icons" v-if="status === 'Yes'">&#xE5CA;</i>
+    <i class="material-icons" v-if="status === 'No'">&#xE5CD;</i>
+    <span v-if="status === 'Maybe'">?</span>
+  </span>
   <em class="text-muted" v-else>Response Needed</em>
 </template>
 <script>
@@ -18,3 +23,14 @@ export default {
   }
 }
 </script>
+<style>
+.status-indicator{
+  width: 34px;
+  height: 34px;
+  text-align: center;
+}
+.status-indicator.badge-secondary span{
+  font-size: 24px;
+  font-weight: 200;
+}
+</style>
