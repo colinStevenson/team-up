@@ -52,7 +52,8 @@ $attendance-control-button-size: 54px;
   input.yes{
     &+label{
        &:before{
-        content: '\2713';
+        font-family: 'Material Icons';
+        content: '\E5CA';
       } 
     }
     &:checked + label{
@@ -63,6 +64,7 @@ $attendance-control-button-size: 54px;
     &+label{
      &:before{
         content: '?'; 
+        font-weight: 300;
       }
     }
     &:checked + label{
@@ -72,7 +74,8 @@ $attendance-control-button-size: 54px;
   input.no{
     &+label{
      &:before{
-       content: '\2715'; 
+        font-family: 'Material Icons';
+        content: '\e5cd'; 
       }
     }
     &:checked + label{
