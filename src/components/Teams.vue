@@ -6,7 +6,7 @@
       </div>
     </div>
      <div class="container">
-        <section class="card" :class="{'is-loading': isLoadingTeams}" v-if="teams && teams.length">
+        <section class="card mb-3" :class="{'is-loading': isLoadingTeams}" v-if="teams && teams.length">
           <ul class="list-group list-group-flush">
               <li v-for="team in teams" class="list-group-item">
                 <router-link :to="`/team/${team.id}`">{{team.name}}</router-link>

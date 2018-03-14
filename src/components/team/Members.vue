@@ -8,9 +8,11 @@
         {{member.firstName}} {{member.lastName}}
       </li>
       <template v-if="isAdmin">
-        <li v-for="invitation in unacceptedInvitations" class="list-group-item d-flex justify-content-between">
-          <span class="text-muted">{{invitation.email}}</span> 
-          <em>Invitation pending</em>
+        <li v-for="invitation in unacceptedInvitations" class="list-group-item">
+          <div class="text-muted">{{invitation.email}}</div> 
+          <small>
+            <em>Invitation pending</em>
+          </small>
         </li>
       </template>
     </ul>
