@@ -25,7 +25,7 @@
               <strong class="pr-2">{{ $moment(event.time).format('MMM Do h:mma') }}</strong>
               {{event.location}}
             </h3>
-            <attendance-count v-if="teamAttendance" :men="menIn.length" :women="womenIn.length"></attendance-count>
+            <attendance-count v-if="teamAttendance" :men="menIn.length" :women="womenIn.length" :isCoed="isCoedTeam"></attendance-count>
               <ul class="list-group mb-3" v-if="!!teamAttendance">
                 <li class="list-group-item d-flex justify-content-between" v-for="member in membersWithAttendance">
                   <span>{{member.firstName}} {{member.lastName}}</span>
@@ -111,6 +111,20 @@ export default {
       members.forEach(member => {
         value.push(Object.assign({}, member, {attendance: this.attendancesByUserId[member.id] || {}}))
       })
+      return value
+    },
+    isCoedTeam () {
+      let value = false
+      const members = this.event && this.event.team && this.event.team.users ? this.event.team.users : []
+      if (members.length > 1) {
+        const gender = members[0].gender
+        for (let i = 1; i < members.length; i++) {
+          if (members[i].gender !== gender) {
+            value = true
+            break
+          }
+        }
+      }
       return value
     }
   },

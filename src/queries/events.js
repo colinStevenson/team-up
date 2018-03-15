@@ -13,7 +13,8 @@ const EVENT_BY_ID = gql`
         users {
           id,
           firstName,
-          lastName
+          lastName,
+          gender
         }
       },
     }
