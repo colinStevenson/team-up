@@ -1,22 +1,22 @@
 <template>
   <div class="attendance-count">
-    <dl>
-      <dd>Total:</dd>
-      <dt>{{men + women}}</dt>
-    </dl>
-    <dl>
+    <dl v-if="isCoed">
       <dd>Women:</dd>
       <dt>{{women}}</dt>
     </dl>
-    <dl>
+    <dl v-if="isCoed">
       <dd>Men:</dd>
       <dt>{{men}}</dt>
+    </dl>
+    <dl>
+      <dd>Total:</dd>
+      <dt>{{men + women}}</dt>
     </dl>
   </div>
 </template>
 <script>
 export default {
-  props: ['men', 'women']
+  props: ['men', 'women', 'isCoed']
 }
 </script>
 <style lang="scss">
@@ -24,7 +24,6 @@ export default {
   margin: 0 0 10px;
   > dl{
     margin: 0;
-    display: inline;
 
     dt,
     dd{
