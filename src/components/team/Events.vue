@@ -11,7 +11,7 @@
             <strong>{{ $moment(event.time).format('MMM Do') }}</strong>
               {{ $moment(event.time).format('h:mma') }}
           </div>
-          <attendance-buttons :event-id="event.id" :team-id="teamId"></attendance-buttons>
+          <attendance-buttons :event-id="event.id" :team-id="teamId" :attendance="getUserAttendanceFromAttendances(event.attendances)"></attendance-buttons>
         </li>
       </ul>
       <div class="card-body" v-if="isAdmin">
@@ -45,7 +45,7 @@
             <strong>{{ $moment(event.time).format('MMM Do') }}</strong>
               {{ $moment(event.time).format('h:mma') }}
           </div>
-          <attendance-buttons :event-id="event.id" :team-id="teamId"></attendance-buttons>
+          <attendance-buttons :event-id="event.id" :team-id="teamId" :attendance="getUserAttendanceFromAttendances(event.attendances)"></attendance-buttons>
         </li>
       </ul>
     </section>
@@ -56,7 +56,7 @@
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import AttendanceButtons from './../events/AttendanceButtons'
+import AttendanceButtons from './../shared/AttendanceButtons'
 import Moment from 'moment'
 
 export default {
@@ -65,6 +65,7 @@ export default {
   },
   computed: {
     ...mapGetters([
+      'user',
       'teamEvents',
       'isAdmin'
     ]),
@@ -105,6 +106,16 @@ export default {
       'createTeamEvent',
       'getTeamEvents'
     ]),
+    getUserAttendanceFromAttendances (attendances) {
+      let value = null
+      for (let i = 0; i < attendances.length; i++) {
+        if (attendances[i].user.id === this.user.id) {
+          value = attendances[i]
+          break
+        }
+      }
+      return value
+    },
     toggleEditing () {
       this.isEditing = !this.isEditing
     },
@@ -125,21 +136,8 @@ export default {
       })
     }
   },
-  mounted () {
-    this.requestEvents()
-  },
   props: ['teamId']
 }
 </script>
 
-<style lang="scss">
-  .card-header {
-    border-bottom: none;
-  }
-  .table td, .table th {
-    padding: 0.3rem;
-    border-top: none;
-    vertical-align: middle;
-  }
-</style>
 

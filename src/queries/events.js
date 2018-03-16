@@ -30,7 +30,18 @@ const EVENTS_BY_TEAM = gql`
     }) {
       id
       name
-      time
+      time,
+      attendances {
+        id,
+        status,
+        user {
+          id,
+          email
+          firstName,
+          lastName,
+          gender
+        }
+      }
     }
   }
 `

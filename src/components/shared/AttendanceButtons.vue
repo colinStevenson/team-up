@@ -41,6 +41,9 @@ export default {
     },
     teamId: {
       required: true
+    },
+    attendance: {
+      required: false
     }
   },
   computed: {
@@ -48,8 +51,8 @@ export default {
       'user',
       'attendancesByEventId'
     ]),
-    attendance () {
-      let val = null
+    eventAttendance () {
+      let val = this.attendance || null
       if (this.attendancesByEventId && this.attendancesByEventId[this.eventId]) {
         val = this.attendancesByEventId[this.eventId]
       }
@@ -88,9 +91,9 @@ export default {
     },
     saveStatus (status) {
       this.isLoading = true
-      if (this.attendance && this.attendance.id) {
+      if (this.eventAttendance && this.eventAttendance.id) {
         this.updateAttendance({
-          attendanceId: this.attendance.id,
+          attendanceId: this.eventAttendance.id,
           eventId: this.eventId,
           userId: this.user.id,
           status: status
@@ -109,8 +112,16 @@ export default {
       }
     }
   },
-  mounted () {
-    this.getAttendancesByEventId({eventId: this.eventId, userId: this.user.id})
+  created () {
+    if (this.attendance) {
+      this.noWatchStatus = true
+      this.status = this.attendance.status
+      this.$nextTick(() => {
+        this.noWatchStatus = false
+      })
+    } else {
+      this.getAttendancesByEventId({eventId: this.eventId, userId: this.user.id})
+    }
   },
   watch: {
     status (newVal, oldVal) {
@@ -119,9 +130,9 @@ export default {
       }
     },
     attendancesByEventId () {
-      if (this.attendance) {
+      if (this.eventAttendance) {
         this.noWatchStatus = true
-        this.status = this.attendance.status
+        this.status = this.eventAttendance.status
         this.$nextTick(() => {
           this.noWatchStatus = false
         })
