@@ -8,6 +8,11 @@
           </div>
       </div>
       <div class="container">
+        <div class="mb-3">
+          <router-link to="/teams" v-if="teams && teams.length > 1">
+            <i class="material-icons md-16">&#xE5C4;</i>Back to Teams
+          </router-link>
+        </div>
         <div class="row">
           <div class="col-md-8">
             <events :team-id="id"></events>
@@ -36,6 +41,7 @@ export default {
   computed: {
     ...mapGetters([
       'team',
+      'teams',
       'user'
     ]),
     hasSufficientData () {

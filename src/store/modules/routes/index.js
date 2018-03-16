@@ -14,6 +14,7 @@ const actions = {
     context.commit('SET_LOADING_ROUTE_DATA', true)
     return Promise.all([
       context.dispatch('getTeam', teamId),
+      context.dispatch('getTeams', {userId}),
       context.dispatch('getUserTeamRole', {userId, teamId}),
       context.dispatch('getTeamEvents', {teamId}),
       context.dispatch('getTeamMembers', teamId)
