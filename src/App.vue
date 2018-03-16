@@ -15,23 +15,23 @@
 
 <script>
 import auth from './auth/AuthService'
-import SiteLoader from './components/shared/SiteLoader'
 import SiteHeader from './components/SiteHeader'
-import { mapGetters } from 'vuex'
+import SiteLoader from './components/shared/SiteLoader'
+import { mapGetters, mapActions } from 'vuex'
 const { authenticated, authNotifier } = auth
 
 export default {
   name: 'app',
   created () {
     this.handleRedirect()
-    this.$store.dispatch('getUser')
+    this.getUser()
     auth.authNotifier.on('authChange', (authStatus) => {
-      this.$store.dispatch('getUser')
+      this.getUser()
     })
   },
   components: {
-    SiteLoader,
-    SiteHeader
+    SiteHeader,
+    SiteLoader
   },
   computed: {
     ...mapGetters([
@@ -50,6 +50,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions([
+      'getUser'
+    ]),
     handleRedirect () {
       if (this.$route.query && this.$route.query.redirect && this.authenticated) {
         this.$router.replace(this.$route.query.redirect)

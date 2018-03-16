@@ -17,7 +17,7 @@ const getters = {
 
 const actions = {
   getTeams (context, {userId, forceNetwork}) {
-    apolloClient.query({
+    return apolloClient.query({
       query: Queries.ALL_TEAMS_QUERY,
       variables: {
         userId
@@ -28,7 +28,7 @@ const actions = {
     })
   },
   getTeam (context, teamId) {
-    apolloClient.query({
+    return apolloClient.query({
       query: Queries.TEAM_BY_ID,
       variables: {
         teamId
@@ -39,7 +39,7 @@ const actions = {
   },
   getTeamMembers (context, teamId) {
     context.commit('SET_TEAM_MEMBERS_LOADING', true)
-    apolloClient.query({
+    return apolloClient.query({
       query: Queries.TEAM_MEMBERS_BY_ID,
       variables: {
         teamId

@@ -1,39 +1,43 @@
 <template>
   <div>
-    <div class="page-header">
+    <site-loader v-if="isLoading"></site-loader>
+    <div v-else>
+      <div class="page-header">
+        <div class="container">
+          <h1>My Teams</h1>
+        </div>
+      </div>
       <div class="container">
-        <h1>My Teams</h1>
-      </div>
+          <section class="card mb-3" :class="{'is-loading': isLoadingTeams}" v-if="teams && teams.length">
+            <ul class="list-group list-group-flush">
+                <li v-for="team in teams" class="list-group-item">
+                  <router-link :to="`/team/${team.id}`">{{team.name}}</router-link>
+                </li>
+            </ul>
+          </section>
+          <section class="card" :class="{'is-loading': isLoadingTeams}" v-if="invitations && invitations.length ">
+            <div class="card-body">
+              <h2 class="card-title">Invitations</h2>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li 
+                  v-for="invitation in invitations" 
+                  class="list-group-item d-flex justify-content-between">
+                  <span>{{invitation.team.name}}</span>
+                  <button class="btn btn-primary btn-sm" @click="joinTeam(invitation.team.id, invitation.id)">Join</button>
+                </li>
+            </ul>
+          </section>
+          <section class="jumbotron" v-if="!isLoadingTeams && !hasTeamsOrInvites">
+            <p>Please contact your team manager to obtain an invite to your teams page. Be sure they use the email you have created an account with to send the invite.</p>
+          </section>
+        </div>
     </div>
-     <div class="container">
-        <section class="card mb-3" :class="{'is-loading': isLoadingTeams}" v-if="teams && teams.length">
-          <ul class="list-group list-group-flush">
-              <li v-for="team in teams" class="list-group-item">
-                <router-link :to="`/team/${team.id}`">{{team.name}}</router-link>
-              </li>
-          </ul>
-        </section>
-        <section class="card" :class="{'is-loading': isLoadingTeams}" v-if="invitations && invitations.length ">
-          <div class="card-body">
-            <h2 class="card-title">Invitations</h2>
-          </div>
-          <ul class="list-group list-group-flush">
-              <li 
-                v-for="invitation in invitations" 
-                class="list-group-item d-flex justify-content-between">
-                <span>{{invitation.team.name}}</span>
-                <button class="btn btn-primary btn-sm" @click="joinTeam(invitation.team.id, invitation.id)">Join</button>
-              </li>
-          </ul>
-        </section>
-        <section class="jumbotron" v-if="!isLoadingTeams && !hasTeamsOrInvites">
-          <p>Please contact your team manager to obtain an invite to your teams page. Be sure they use the email you have created an account with to send the invite.</p>
-        </section>
-      </div>
   </div>
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import RouteMixin from './mixins/RouteMixin'
 import RequiresRegistrationMixin from './mixins/RequiresRegistrationMixin'
 
 export default {
@@ -55,14 +59,12 @@ export default {
       isLoadingInvitations: false
     }
   },
-  mounted () {
-    if (this.user) {
-      this.requestTeams()
-      this.requestInvitations()
-    }
+  created () {
+    this.getTeamsRouteData({userId: this.user.id, email: this.user.email})
   },
   methods: {
     ...mapActions([
+      'getTeamsRouteData',
       'getTeams',
       'getInvitations',
       'addUserToTeam'
@@ -102,6 +104,7 @@ export default {
     }
   },
   mixins: [
+    RouteMixin,
     RequiresRegistrationMixin
   ],
   watch: {

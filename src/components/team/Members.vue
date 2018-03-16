@@ -63,8 +63,7 @@ export default {
   methods: {
     ...mapActions([
       'sendInvitation',
-      'getUnacceptedInvitations',
-      'getTeamMembers'
+      'getUnacceptedInvitations'
     ]),
     toggleInviting () {
       this.isInviting = !this.isInviting
@@ -111,8 +110,7 @@ export default {
       return isValid
     }
   },
-  mounted () {
-    this.requestMembers()
+  created () {
     if (this.isAdmin) {
       this.requestUnacceptedInvitations()
     }
