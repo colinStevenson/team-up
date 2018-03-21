@@ -6,7 +6,7 @@
       </div>
       <ul class="list-group list-group-flush">
         <li class="list-group-item d-flex justify-content-between" v-for="event in upcomingEvents">
-          <router-link :to="`/event/${event.id}`">{{event.name}}</router-link>
+          <router-link :to="`/event/${event.id}`" class="btn btn-sm btn-secondary">{{event.name}}</router-link>
           <div>
             <strong>{{ $moment(event.time).format('MMM Do') }}</strong>
               {{ $moment(event.time).format('h:mma') }}
@@ -40,7 +40,7 @@
       </div>
       <ul class="list-group list-group-flush">
         <li class="list-group-item d-flex justify-content-between" v-for="event in pastEvents">
-          <router-link :to="`/event/${event.id}`">{{event.name}}</router-link>
+          <router-link :to="`/event/${event.id}`" class="btn btn-sm btn-secondary">{{event.name}}</router-link>
           <div>
             <strong>{{ $moment(event.time).format('MMM Do') }}</strong>
               {{ $moment(event.time).format('h:mma') }}
