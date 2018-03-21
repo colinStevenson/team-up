@@ -69,6 +69,21 @@ export default {
       'teamEvents',
       'isAdmin'
     ]),
+    sortedEvents () {
+      let events = this.teamEvents || []
+      events = events.slice(0)
+      events = events.sort((a, b) => {
+        let val = 0
+        if (a.time > b.time) {
+          val = 1
+        }
+        if (b.time > a.time) {
+          val = -1
+        }
+        return val
+      })
+      return events
+    },
     startOfDay () {
       const val = new Date()
       val.setHours(0)
@@ -77,15 +92,13 @@ export default {
       return val
     },
     upcomingEvents () {
-      let val = this.teamEvents || []
-      return val.filter(event => {
+      return this.sortedEvents.filter(event => {
         const eventDate = Moment(event.time)
         return eventDate.isAfter(this.startOfDay)
       })
     },
     pastEvents () {
-      let val = this.teamEvents || []
-      return val.filter(event => {
+      return this.sortedEvents.filter(event => {
         const eventDate = Moment(event.time)
         return eventDate.isBefore(this.startOfDay)
       })
